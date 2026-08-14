@@ -1,0 +1,2055 @@
+/* ========================================== */
+/* TEMA DEĞİŞKENLERİ (AÇIK TEMA)             */
+/* ========================================== */
+:root, [data-theme="light"] {
+    --bg-main: #f8fafc;          /* Açık gri/beyaz arka plan */
+    --bg-surface: #ffffff;       /* Kartlar ve header için beyaz */
+    --border-color: #e2e8f0;     /* Açık gri çizgiler */
+    --text-primary: #0f172a;     /* Koyu lacivert/siyah yazılar */
+    --text-secondary: #64748b;   /* Gri açıklama yazıları */
+    --nav-active: #818cf8;
+    
+    /* Sabit Renkler */
+    --color-purple: #818cf8;
+    --color-blue: #3b82f6;
+    --color-green: #10b981;
+    --color-orange: #f59e0b;
+}
+
+/* KOYU TEMA (Dark Mode) RENKLERİ */
+[data-theme="dark"] {
+    --bg-main: #0b0f19;          /* Derin siyah/lacivert arka plan */
+    --bg-surface: #111827;       /* Koyu gri kartlar ve header */
+    --border-color: #1f2937;     /* Koyu gri çizgiler */
+    --text-primary: #f1f5f9;     /* Beyaz yazılar */
+    --text-secondary: #9ca3af;   /* Açık gri açıklama yazıları */
+    --nav-active: #a5b4fc;
+}
+
+/* Modern Sıfırlamalar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; /* Temalar arası yumuşak geçiş */
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* height yerine min-height */
+    overflow-x: hidden;
+    overflow-y: auto; /* Dikey kaydırmaya izin ver */
+}
+
+/* Şık Üst Başlık (Header) */
+.app-header {
+    background-color: var(--bg-surface);
+    height: 60px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.app-header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.5px;
+}
+
+.header-right-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Buton Stilleri */
+.back-btn, .profile-shortcut-btn, .theme-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 20px;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-btn:active, .profile-shortcut-btn:active, .theme-btn:active {
+    color: var(--color-purple);
+}
+
+/* Ana İçerik */
+/* Ana İçerik Güncellemesi */
+.app-content {
+    flex: 1;
+    margin-top: 0px;
+    padding: 20px 20px 100px 20px; /* Üst: 20px, Sağ: 20px, Alt: 100px (Menü payı), Sol: 20px */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Mobilde akıcı kaydırma desteği */
+}
+
+/* Ekran Geçiş Dinamikleri */
+.app-screen {
+    display: none;
+}
+
+.app-screen.active {
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================== */
+/* ANA SAYFA (DASHBOARD) STİLLERİ             */
+/* ========================================== */
+.welcome-section {
+    margin-bottom: 25px;
+    margin-top: 5px;
+}
+
+.welcome-section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.welcome-section p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.dashboard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 20px; /* Son kartın menü altında kalmaması için güvenlik alanı */
+}
+
+/* Modern Buton Kartı Tasarımı */
+.dash-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.dash-card:active {
+    transform: scale(0.97);
+    background-color: var(--border-color);
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-right: 16px;
+}
+
+/* İkon Renk Varyasyonları */
+.icon-purple { background-color: rgba(129, 140, 248, 0.15); color: var(--color-purple); }
+.icon-blue { background-color: rgba(59, 130, 246, 0.15); color: var(--color-blue); }
+.icon-green { background-color: rgba(16, 185, 129, 0.15); color: var(--color-green); }
+.icon-orange { background-color: rgba(245, 158, 11, 0.15); color: var(--color-orange); }
+
+.card-info {
+    flex: 1;
+}
+
+.card-info h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.card-info p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.dash-card .arrow {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* İç Sayfalar İçin Geçici Alan Tasarımı */
+.inner-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.inner-placeholder i {
+    font-size: 50px;
+    margin-bottom: 15px;
+    color: var(--border-color);
+}
+
+/* ========================================== */
+/* POMODORO EKRANI STİLLERİ                   */
+/* ========================================== */
+.pomodoro-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.pomodoro-modes {
+    display: flex;
+    background-color: var(--bg-surface);
+    padding: 4px;
+    border-radius: 25px;
+    margin-bottom: 35px;
+    border: 1px solid var(--border-color);
+}
+
+.mode-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.mode-btn.active {
+    background-color: var(--color-purple);
+    color: #ffffff;
+}
+
+.timer-circle {
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    border: 4px solid var(--border-color);
+    border-top-color: var(--color-purple);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+#timer-display {
+    font-size: 54px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.timer-controls {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 280px;
+}
+
+.control-btn {
+    flex: 1;
+    border: none;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.control-btn.start { background-color: var(--color-green); color: white; }
+.control-btn.pause { background-color: var(--color-orange); color: white; }
+.control-btn.reset { background-color: var(--border-color); color: var(--text-secondary); }
+
+[data-theme="dark"] .control-btn.reset { background-color: #1f2937; color: #9ca3af; }
+
+.hidden { display: none !important; }
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================== */
+/* POMODORO SÜRE AYARLAMA PANELİ STİLLERİ     */
+/* ========================================== */
+.pomodoro-settings-toggle {
+    margin-top: 25px;
+}
+
+.settings-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.settings-toggle-btn:active {
+    color: var(--color-purple);
+}
+
+.pomodoro-settings {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 15px;
+    width: 100%;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    animation: slideUp 0.2s ease;
+}
+
+.settings-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.settings-group input {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 6px 10px;
+    border-radius: 8px;
+    width: 70px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.settings-group input:focus {
+    outline: none;
+    border-color: var(--color-purple);
+}
+
+.save-settings-btn {
+    background-color: var(--color-purple);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.save-settings-btn:active {
+    transform: scale(0.97);
+}
+
+/* ========================================== */
+/* MOBİL BİLDİRİM (TOAST TOAST) STİLLERİ      */
+/* ========================================== */
+.toast-container {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 90%;
+    max-width: 320px;
+    pointer-events: none;
+}
+
+.toast-message {
+    background-color: var(--text-primary);
+    color: var(--bg-surface);
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toast-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ========================================== */
+/* POMODORO TAM EKRAN (ZEN MODU) STİLLERİ     */
+/* ========================================== */
+.zen-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 18px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.zen-toggle-btn:active {
+    transform: scale(0.9);
+    color: var(--color-purple);
+}
+
+/* Zen Modu Aktif Olduğunda Tetiklenecek Global Sınıflar */
+body.zen-mode-active .app-header {
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+}
+
+body.zen-mode-active .app-content {
+    margin-top: 0px !important;
+    padding-top: 40px !important;
+    transition: margin-top 0.3s ease, padding-top 0.3s ease;
+}
+
+body.zen-mode-active .pomodoro-modes,
+body.zen-mode-active .pomodoro-settings-toggle,
+body.zen-mode-active #pomodoro-settings-panel {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    height: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+    transition: opacity 0.2s ease, margin 0.2s ease, height 0.2s ease;
+}
+
+/* Geri kalan bileşenlerin akıcı animasyon geçişleri için */
+.app-header, .app-content, .pomodoro-modes, .pomodoro-settings-toggle {
+    transition: transform 0.3s ease, margin 0.3s ease, padding 0.3s ease, opacity 0.2s ease;
+}
+
+/* ========================================== */
+/* DAKİKA & SANİYE AYAR YAN YANA DÜZENİ       */
+/* ========================================== */
+.settings-group-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 5px;
+}
+
+.settings-row {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.settings-sub-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
+
+.settings-sub-group label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.settings-sub-group input {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 6px 8px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 60px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.settings-sub-group input:focus {
+    outline: none;
+    border-color: var(--color-purple);
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ========================================== */
+/* DERS NOTLARI MODÜLÜ STİLLERİ              */
+/* ========================================== */
+.notes-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+.note-form-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.note-form-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.note-form-card .form-group {
+    margin-bottom: 10px;
+}
+
+.note-form-card input,
+.note-form-card textarea {
+    width: 100%;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: border-color 0.2s ease;
+}
+
+.note-form-card input:focus,
+.note-form-card textarea:focus {
+    outline: none;
+    border-color: var(--color-purple);
+}
+
+.add-note-btn {
+    width: 100%;
+    background-color: var(--color-purple);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.1s ease;
+}
+
+.add-note-btn:active {
+    transform: scale(0.98);
+}
+
+.notes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.notes-header h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.notes-header .badge {
+    background-color: var(--border-color);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.notes-empty {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-secondary);
+}
+
+.notes-empty i {
+    font-size: 36px;
+    margin-bottom: 10px;
+    opacity: 0.4;
+}
+
+.notes-empty p {
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* Not Kartı Tasarımı */
+.note-item-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    animation: slideUp 0.25s ease;
+}
+
+.note-item-content {
+    flex: 1;
+}
+
+.note-item-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    word-break: break-word;
+}
+
+.note-item-body {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.note-item-date {
+    font-size: 10px;
+    color: var(--text-secondary);
+    opacity: 0.6;
+    margin-top: 8px;
+}
+
+.btn-delete-note {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 15px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-delete-note:hover {
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.05);
+}
+
+/* ========================================== */
+/* SAMSUNG NOTES TARZI GELİŞMİŞ EDİTÖR        */
+/* ========================================== */
+.notes-wrapper {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    padding-bottom: 20px;
+}
+
+.notes-action-bar {
+    margin-bottom: 15px;
+}
+
+/* Editör Ana Yapısı */
+.note-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeIn 0.2s ease;
+}
+
+.editor-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 12px;
+    gap: 8px;
+}
+
+.drawing-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--bg-main);
+    padding: 4px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.toolbar-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.toolbar-btn:hover, .toolbar-btn.active {
+    background-color: var(--border-color);
+    color: var(--color-purple);
+}
+
+.toolbar-btn.text-danger { color: #ef4444; }
+.toolbar-btn.text-success { color: #10b981; }
+
+#input-paint-color {
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    background: none;
+}
+
+/* Dijital Kağıt Alanı */
+.note-paper {
+    position: relative;
+    background-color: #ffffff; /* Gerçek kağıt beyazlığı */
+    border: 1px solid #cbd5e1;
+    border-radius: 16px;
+    min-height: 450px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Çizim Katmanı */
+#note-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    cursor: crosshair;
+    pointer-events: none; /* Varsayılan olarak yazı yazma aktifken tıklamayı arkaya geçirsin */
+}
+
+.note-editor.draw-active #note-canvas {
+    pointer-events: auto; /* Çizim aktifken tıklamaları canvas alsın */
+}
+
+/* Metin Katmanı */
+#editor-textarea {
+    width: 100%;
+    flex: 1;
+    background: transparent;
+    border: none;
+    resize: none;
+    padding: 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #1e293b; /* Kağıt üzerinde okunaklı koyu renk */
+    font-family: inherit;
+    z-index: 2;
+}
+
+#editor-textarea:focus {
+    outline: none;
+}
+
+/* Eklenen Resimlerin Alanı */
+.editor-image-holder {
+    padding: 10px 20px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    z-index: 3;
+    background: transparent;
+}
+
+.editor-image-holder img {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 8px;
+    object-fit: contain;
+    border: 1px solid #e2e8f0;
+}
+
+/* Liste Kartları */
+.note-item-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.note-item-card:not(:active):hover {
+    transform: translateY(-2px);
+}
+
+.note-card-info {
+    flex: 1;
+}
+
+.note-card-meta {
+    display: flex;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+/* ========================================== */
+/* ÇOKLU SAYFA VE DİNAMİK RESİM DÜZENLEME    */
+/* ========================================== */
+.note-title-input-wrapper input {
+    width: 100%;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.notebook-pages-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 65vh;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Her Bir Beyaz Sayfa (A4 Etkisi) */
+.note-page-wrapper {
+    position: relative;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    height: 500px; /* Standart sayfa yüksekliği */
+    min-height: 500px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+
+.note-page-wrapper .page-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 11px;
+    color: #94a3b8;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.note-page-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    cursor: crosshair;
+    pointer-events: none;
+}
+
+.note-editor.draw-active .note-page-canvas {
+    pointer-events: auto;
+}
+
+.note-page-textarea {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    resize: none;
+    padding: 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #1e293b;
+    font-family: inherit;
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.note-page-textarea:focus { outline: none; }
+
+/* Akıllı Hareketli & Boyutlandırılabilir Resim Kartı */
+.resizable-image-box {
+    position: absolute;
+    z-index: 8;
+    cursor: move;
+    border: 1px dashed transparent;
+    padding: 2px;
+}
+
+.resizable-image-box.selected {
+    border-color: var(--color-blue);
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+.resizable-image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+/* Köşedeki Boyutlandırma Noktası */
+.image-resizer-handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-blue);
+    border: 1px solid white;
+    border-radius: 50%;
+    bottom: -5px;
+    right: -5px;
+    cursor: se-resize;
+    display: none;
+}
+
+.resizable-image-box.selected .image-resizer-handle {
+    display: block;
+}
+
+/* ========================================================================== */
+/* SAMSUNG NOTES PRO - FORMATLAMA VE GELİŞMİŞ METİN-RESİM İLİŞKİSİ             */
+/* ========================================================================== */
+.text-format-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: 10px;
+    flex-wrap: wrap;
+}
+
+.format-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.format-btn:hover {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+}
+
+.format-select {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.text-color-picker-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: var(--bg-main);
+    padding: 2px 6px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+#input-text-color {
+    border: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    background: none;
+}
+
+/* Yenilenen Zengin Sayfa Yapısı */
+.note-page-wrapper {
+    position: relative;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    min-height: 520px;
+    height: auto; /* İçerik uzadıkça doğal taşmayı önlemek için esnek yapı */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    padding: 20px;
+    display: block;
+}
+
+/* Şeffaf Çizim Katmanı (En Üstte Yer Alır) */
+.note-page-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    cursor: crosshair;
+    pointer-events: none; /* Metin yazarken tıklamayı alta geçirir */
+}
+
+.note-editor.draw-active .note-page-canvas {
+    pointer-events: auto; /* Çizim modunda tıklamaları yakalar */
+}
+
+/* Yeni Nesil Zengin Metin Katmanı */
+.note-page-rich-content {
+    width: 100%;
+    min-height: 480px;
+    color: #1e293b;
+    font-size: 15px;
+    line-height: 1.6;
+    outline: none;
+    position: relative;
+    z-index: 2;
+    word-break: break-word;
+}
+
+/* Maddeli Liste Özelleştirmesi */
+.note-page-rich-content ul {
+    padding-left: 25px;
+    margin-bottom: 10px;
+}
+
+/* Akıllı Resim Kutusu (Metinlerin Etrafından Akabilmesi İçin Float Yapısı) */
+.resizable-image-box {
+    display: block;
+    position: relative;
+    float: right; /* Resim sağa yaslanır, metinler solundan akar */
+    margin: 10px 0 10px 15px;
+    z-index: 4;
+    border: 2px dashed transparent;
+    padding: 3px;
+    user-select: none;
+}
+
+/* Çizim modundayken resimlerin üzerindeki seçimi kaldır ve tıklamayı engelle */
+.note-editor.draw-active .resizable-image-box {
+    cursor: crosshair;
+}
+
+.resizable-image-box.selected {
+    border-color: var(--color-blue);
+    background-color: rgba(59, 130, 246, 0.03);
+    cursor: move;
+}
+
+.resizable-image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+}
+
+.image-resizer-handle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: var(--color-blue);
+    border: 2px solid white;
+    border-radius: 50%;
+    bottom: -6px;
+    right: -6px;
+    cursor: se-resize;
+    display: none;
+    z-index: 10;
+}
+
+.resizable-image-box.selected .image-resizer-handle {
+    display: block;
+}
+
+/* Sürükleme esnasında hedef sayfa vurgusu */
+.note-page-wrapper.drag-hover {
+    border: 2px dashed var(--color-purple);
+    background-color: rgba(129, 140, 248, 0.02);
+}
+
+/* ========================================================================== */
+/* WORD MANTIĞI & YAPIŞKAN ARAÇ ÇUBUĞU DESTEĞİ                                */
+/* ========================================================================== */
+
+/* Araç çubuklarını sabitleyen yapışkan kapsayıcı */
+.editor-sticky-header-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--bg-main);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.notebook-pages-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    max-height: calc(100vh - 210px); /* Ekran yüksekliğine göre dinamik taşma ayarı */
+    overflow-y: auto;
+    padding: 10px 4px;
+}
+
+/* Yenilenen Serbest Konumlu Sayfa Kapsayıcısı */
+.note-page-wrapper {
+    position: relative;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    min-height: 550px;
+    height: 550px; /* Koordinat tutarlılığı için sayfalar sabit A4/Not kağıdı modundadır */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    overflow: hidden; /* Resimlerin dışarı taşmasını önler */
+}
+
+/* Metin Katmanı */
+.note-page-rich-content {
+    width: 100%;
+    height: 100%;
+    color: #1e293b;
+    font-size: 14px;
+    line-height: 1.6;
+    outline: none;
+    padding: 20px;
+    overflow-y: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    word-break: break-word;
+}
+
+/* Tam Özgür Konumlu Resim Kutusu (Absolute) */
+.resizable-image-box {
+    position: absolute; /* Float kaldırıldı, artık sayfa içinde özgürce gezer */
+    z-index: 10;
+    border: 2px dashed transparent;
+    padding: 3px;
+    user-select: none;
+    display: inline-block;
+}
+
+.resizable-image-box.selected {
+    border-color: var(--color-blue);
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+.resizable-image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+}
+
+/* Çizim Katmanı */
+.note-page-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 6;
+    pointer-events: none;
+}
+
+.note-editor.draw-active .note-page-canvas {
+    pointer-events: auto;
+    z-index: 15; /* Çizim modunda resimlerin de üstüne çıkabilmesi için */
+}
+
+/* ========================================================================== */
+/* RESİM METİN AKIŞI VE SÜRÜKLENEN ALAN KORUMA DÜZENLEMELERİ                  */
+/* ========================================================================== */
+
+/* Resim kutusunun absolute katmandan çıkıp yazı akışına (Relative/Block) dahil edilmesi */
+.note-page-wrapper .resizable-image-box {
+    position: relative !important; /* Yazıların resmin altında kalmasını kesin olarak önler */
+    top: auto !important;
+    left: auto !important;
+    clear: both;
+    display: inline-block;
+    vertical-align: top;
+    margin: 12px 0;
+    padding: 6px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 8px;
+    background-color: var(--bg-main);
+    z-index: 5;
+}
+
+/* Resim yanındaki metinlerin kaymasını ve taşmasını engelleme */
+.note-page-rich-content {
+    display: block;
+    overflow-y: auto;
+    height: 100% !important;
+    position: relative !important;
+    z-index: 4 !important;
+}
+
+/* Resim kutusu seçildiğinde kenarlık vurgusu */
+.resizable-image-box.selected {
+    border-color: var(--color-purple) !important;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+}
+
+/* Resim eklendikten sonra gelen paragrafların resmin altından devam etmesi */
+.note-page-rich-content div {
+    clear: currentColor;
+}
+
+/* ========================================================================== */
+/* YENİ SONSUZ SAYFA AKIŞI, ÇİZİM KİLİTLEME VE STİL MENÜSÜ STİLLERİ           */
+/* ========================================================================== */
+
+/* ========================================================================== */
+/* GELİŞMİŞ MOBİL UYUMLU, MİNİMAL BOŞLUKLU DİJİTAL KAĞIT STİLLERİ             */
+/* ========================================================================== */
+
+.note-page-wrapper {
+    position: relative !important;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    height: 550px !important;
+    overflow-y: auto !important;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+/* Sayfa kenar boşlukları en aza indirildi (Yazı doğrudan kenardan başlar) */
+.note-page-rich-content {
+    position: relative;
+    z-index: 3 !important;
+    background: transparent !important;
+    padding: 8px 12px !important; /* Üst/Alt 8px, Sağ/Sol 12px yapıldı */
+    min-height: 100%;
+    height: auto !important;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* Çizim modunda metin seçimini ve imleci tamamen kapatan sınıf */
+.note-page-rich-content.drawing-mode-active {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    cursor: crosshair !important;
+}
+
+/* Çizim modunda resimlerin üstüne çizgi çekilebilmesi için kısıtlamayı kaldırıyoruz */
+.note-editor.draw-active .resizable-image-box {
+    pointer-events: auto !important;
+}
+
+.note-page-canvas {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 4 !important; /* Çizim kalemi metnin ve resmin de üzerine çizebilsin diye z-index optimize edildi */
+    background: transparent !important;
+    pointer-events: none;
+}
+
+/* Sayfa Stili Açılır Menüsü - Mobil Tam Uyumlu Duruma Getirildi */
+.page-style-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0; /* Buton sağ köşesinden hizalanarak taşma önlendi */
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 14px;
+    width: 220px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: slideUp 0.15s ease;
+}
+
+/* Mobil cihazlar ve küçük ekranlar için ekstra güvenlik kuralı */
+@media screen and (max-width: 480px) {
+    .page-style-dropdown {
+        right: -50px; /* Mobilde ortalama payı */
+        width: 200px;
+    }
+}
+
+.page-style-dropdown.hidden {
+    display: none !important;
+}
+
+.style-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.style-color-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.style-color-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.style-color-btn:hover {
+    transform: scale(1.1);
+}
+
+.style-pattern-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+.style-pattern-btn:hover {
+    background: var(--border-color);
+}
+
+/* ========================================================================== */
+/* KESİN ÇÖZÜM: BOŞLUK, SATIR VE RESİM DÜZENLEMELERİ                          */
+/* ========================================================================== */
+
+/* Sayfa Stili Butonunun Diğer Butonlarla Eşitlenmesi */
+#btn-change-page-style.tool-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+#btn-change-page-style.tool-btn:hover {
+    background-color: var(--border-color);
+    color: var(--color-purple);
+}
+
+/* Yazı ve Sayfa Kenarı Arasındaki Boşlukların Tamamen Sıfırlanması */
+.note-page-rich-content {
+    padding: 2px 4px !important; /* Üstten ve yanlardan boşluklar en aza indirildi */
+    margin: 0 !important;
+    line-height: 1.25 !important; /* Satır arası boşluklar ciddi oranda daraltıldı */
+    outline: none !important;
+    border: none !important;
+}
+
+/* Satır içi elementlerin (div, p, br) oluşturduğu ekstra boşlukları önleme */
+.note-page-rich-content div, 
+.note-page-rich-content p {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.25 !important;
+}
+
+
+/* Sayfa Geçiş Animasyonları */
+body {
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+body.fade-out {
+    opacity: 0;
+}
+
+/* --- LOGIN REMINDER BANNER --- */
+.auth-banner {
+    background: var(--bg-card, #ffffff);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    border-radius: 16px;
+    margin: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-left: 4px solid #ef4444;
+}
+.banner-content {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+.banner-icon {
+    font-size: 20px;
+    color: #ef4444;
+    margin-top: 2px;
+}
+.banner-text strong {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary, #1e293b);
+}
+.banner-text p {
+    font-size: 12px;
+    color: var(--text-secondary, #64748b);
+    margin: 2px 0 0 0;
+    line-height: 1.4;
+}
+.banner-actions {
+    display: flex;
+    gap: 8px;
+}
+.banner-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+.banner-btn.primary {
+    background: #6366f1;
+    color: #ffffff;
+}
+.banner-btn.secondary {
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+}
+
+/* --- AUTH MODAL (NATIVE SHEET LOOK) --- */
+.auth-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: flex-end;
+    backdrop-filter: blur(4px);
+    transition: opacity 0.3s ease;
+}
+.auth-modal-sheet {
+    background: var(--bg-card, #ffffff);
+    width: 100%;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    padding: 24px;
+    box-sizing: border-box;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s cubic-bezier(0.1, 0.76, 0.55, 0.94);
+}
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+.auth-sheet-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+.sheet-notch {
+    width: 40px;
+    height: 4px;
+    background: #cbd5e1;
+    border-radius: 2px;
+    margin-bottom: 12px;
+}
+.close-auth-btn {
+    position: absolute;
+    right: 0;
+    top: -5px;
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+}
+.auth-tabs {
+    display: flex;
+    background: rgba(0,0,0,0.03);
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+.auth-tab-btn {
+    flex: 1;
+    border: none;
+    background: none;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.auth-tab-btn.active {
+    background: var(--bg-card, #ffffff);
+    color: #6366f1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.input-icon {
+    position: absolute;
+    left: 14px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+.input-wrapper input {
+    width: 100%;
+    padding: 12px 14px 12px 40px !important;
+    border-radius: 10px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background: var(--bg-main, #f8fafc);
+    color: var(--text-primary);
+    font-size: 14px;
+    box-sizing: border-box;
+}
+.auth-action-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: #6366f1;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+.auth-divider::before, .auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+.auth-divider span {
+    padding: 0 10px;
+}
+.google-signin-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background: var(--bg-card, #ffffff);
+    color: var(--text-primary);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+}
+.google-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* --- SIGNED-IN USER PROFILE VIEW --- */
+.profile-card-container {
+    padding: 16px;
+}
+.guest-avatar {
+    font-size: 64px;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+}
+.user-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+    margin-bottom: 20px;
+}
+.profile-pic-wrapper img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--bg-main, #f8fafc);
+    border: 2px solid #6366f1;
+}
+.user-profile-meta h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+}
+.user-profile-meta span {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+.profile-edit-section {
+    background: var(--bg-main, #f8fafc);
+    padding: 16px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+}
+.profile-settings-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background: var(--bg-card, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 12px;
+    cursor: pointer;
+}
+.menu-item-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.menu-item i {
+    font-size: 16px;
+}
+.menu-item.logout {
+    color: #f59e0b;
+}
+.menu-item.danger {
+    color: #ef4444;
+}
+
+/* Helpers */
+.hidden {
+    display: none !important;
+}
+
+/* Existing design structure is preserved, only colors are bound to CSS variables */
+.auth-card {
+    background: var(--bg-surface, #ffffff) !important;
+    border: 1px solid var(--border-color, #f1f1f1) !important;
+    color: var(--text-primary) !important;
+}
+
+.auth-card h2, .auth-card h3, .auth-card label {
+    color: var(--text-primary) !important;
+}
+
+.auth-card p {
+    color: var(--text-secondary) !important;
+}
+
+.auth-card input {
+    background: var(--bg-main, #f8fafc) !important;
+    border: 1px solid var(--border-color, #e2e8f0) !important;
+    color: var(--text-primary) !important;
+}
+
+.auth-card input::placeholder {
+    color: var(--text-secondary) !important;
+    opacity: 0.7;
+}
+
+/* Profile area compatibility */
+.profile-edit-section {
+    background: var(--bg-surface, #ffffff) !important;
+    border: 1px solid var(--border-color, #e2e8f0) !important;
+    color: var(--text-primary) !important;
+}
+
+.profile-edit-section label {
+    color: var(--text-secondary) !important;
+}
+
+.profile-edit-section input {
+    background: var(--bg-main, #f8fafc) !important;
+    border: 1px solid var(--border-color, #e2e8f0) !important;
+    color: var(--text-primary) !important;
+}
+
+.user-profile-meta h2 {
+    color: var(--text-primary) !important;
+}
+
+.user-profile-meta span {
+    color: var(--text-secondary) !important;
+}
+
+/* ==========================================================================
+   DIARY PASSCODE DARK MODE COMPATIBILITY
+   ========================================================================== */
+[data-theme="dark"] #screen-diary-login,
+[data-theme="dark"] .screen-diary-login,
+[data-theme="dark"] .diary-login-container {
+    background-color: var(--bg-main) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .diary-pin-btn,
+[data-theme="dark"] .diary-keypad-btn,
+[data-theme="dark"] .diary-pin-key,
+[data-theme="dark"] .diary-keyboard button,
+[data-theme="dark"] .diary-keypad button,
+[data-theme="dark"] .diary-num-btn,
+[data-theme="dark"] .diary-lock-btn,
+[data-theme="dark"] .pin-btn {
+    background-color: var(--bg-surface) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .diary-pin-dot {
+    background-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .diary-pin-dot.active {
+    background-color: var(--color-purple, #818cf8) !important;
+}
+
+/* Kilitli Yükleme Ekranı Stilleri */
+.lock-loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0f172a; /* Şifreli günlüğün arka plan rengiyle uyumlu */
+    z-index: 100000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+.lock-loader-content {
+    text-align: center;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    color: #f8fafc;
+}
+.lock-icon-wrapper {
+    font-size: 80px;
+    color: #818cf8;
+    margin-bottom: 24px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+.lock-icon-wrapper.locked {
+    color: #34d399; /* Başarıyla kilitlendiğinde yeşile döner */
+    transform: scale(1.1);
+}
+.lock-loader-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+}
+.lock-loader-text {
+    font-size: 14px;
+    color: #94a3b8;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+.progress-bar-container {
+    width: 100%;
+    height: 6px;
+    background-color: #1e293b;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #818cf8, #34d399);
+    border-radius: 10px;
+    transition: width 0.1s linear;
+}
+
+/* Android Bottom Menü */
+.android-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; background-color: var(--bg-surface); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; z-index: 999; }
+.nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: var(--text-secondary); font-size: 12px; font-weight: 600; gap: 4px; width: 50%; height: 100%; }
+.nav-item i { font-size: 18px; }
+.nav-item.active { color: var(--nav-active); }
+
+.black-ops-one-regular {
+  font-family: "Black Ops One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poetsen-one-regular {
+  font-family: "Poetsen One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Header'ı sabit (fixed) olmaktan çıkarıp sayfa akışına dahil ediyoruz */
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 15px 20px 5px 20px;
+    background-color: transparent; /* Arka planı şeffaf yaparak sayfa ile bütünleştiriyoruz */
+    position: relative;
+    z-index: 10;
+    gap: 12px;
+}
+
+/* Başlık stili */
+#header-title {
+    font-size: 20px;
+    margin: 0;
+}
+
+/* Geri Butonu Stili */
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: inherit;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-btn.hidden {
+    display: none !important;
+}
+
+/* İçerik alanının üst margin değerini 0 yapıyoruz */
+.app-content {
+    flex: 1;
+    margin-top: 0; /* Boşluk kalmaması için 0 yapıldı */
+    padding: 10px 20px 100px 20px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ========================================== */
+/* HEADER MOTİVASYON BAŞLIĞI STİLLERİ */
+/* ========================================== */
+#header-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-style: italic;
+    margin: 0;
+    line-height: 1.35;
+    letter-spacing: -0.2px;
+    
+    /* Soft ve Derli Toplu Geçiş Animasyonu */
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Animasyonlu Metin Değişim Sınıfı */
+#header-title.fade-out {
+    opacity: 0;
+    transform: translateY(-6px);
+}
+
+/* Aydınlık Modda Net Okunabilir Koyu Yazı */
+[data-theme="light"] #header-title,
+body:not([data-theme="dark"]) #header-title {
+    color: #0f172a !important;
+}
+
+/* Koyu Modda Göz Yormayan Yumuşak Beyaz */
+[data-theme="dark"] #header-title {
+    color: #bfc5cc !important; /* Saf beyaz yerine soft gri-beyaz */
+    text-shadow: none !important; /* Varsa gölge parlamasını kaldırır */
+}
+
+/* Header Başlık Metninin Kesilmesini Önleme */
+.app-header h1, 
+.app-header #header-title {
+    padding-right: 6px; /* İtalik harflerin ve 'I' harfinin sağdan kesilmesini önler */
+    box-sizing: content-box;
+    overflow: visible !important; /* Metnin dışa taşan kısmını görünür katar */
+    white-space: normal; /* Gerektiğinde metni alt satıra kırmasını sağlar */
+    word-break: keep-all; /* Kelimelerin ortadan bölünmesini engeller */
+}
+
+/* Artı (+) Butonunun Alt Menünün Üstünde Sabitlenmesi */
+#fab-create-note {
+    position: fixed !important;
+    bottom: 75px !important; /* Alt menü 60px olduğu için buton 75px ile tam menünün üzerinde kalır */
+    right: 20px !important;  /* Sağ kenardan ideal uzaklık */
+    z-index: 9999 !important;/* Her zaman en üst katmanda görünmesi için */
+    
+    /* Buton boyutlandırması ve yuvarlak görünüm */
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--color-purple, #818cf8);
+    color: #ffffff;
+    border: none;
+    font-size: 28px;
+    font-weight: bold;
+    
+    /* Gölge ve hizalama */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Butona basılma efekti */
+#fab-create-note:active {
+    transform: scale(0.92);
+}
+
+/* Not listesi kapsayıcısına alt menü çakışmasını önlemek için güvenlik boşluğu */
+#notes-grid-container {
+    padding-bottom: 90px !important;
+}

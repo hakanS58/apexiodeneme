@@ -1,0 +1,157 @@
+/* ========================================================================== */
+/* --- PLANLARIM MODÜLÜ CSS STİLLERİ (DARK MODE UYUMLU) ---                  */
+/* ========================================================================== */
+.plan-days-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    margin-bottom: 30px;
+}
+.plan-day-card {
+    background: var(--bg-surface); /* Sabit #ffffff yerine dinamik yüzey rengi */
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+}
+.plan-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+}
+.plan-day-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.plan-day-badge {
+    font-size: 11px;
+    background: rgba(129, 140, 248, 0.12);
+    color: var(--color-purple, #818cf8);
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+.plan-btn-add {
+    background: transparent;
+    border: none;
+    color: var(--color-purple, #818cf8);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+.plan-btn-add:active {
+    background: rgba(129, 140, 248, 0.05);
+}
+.plan-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.plan-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-main); /* Arka planı dinamik ana renge bağladık */
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    gap: 10px;
+    transition: opacity 0.2s;
+}
+.plan-item.checked {
+    opacity: 0.65;
+}
+.plan-item-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+.plan-checkbox-wrapper {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+.plan-checkbox-wrapper input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+.plan-custom-checkbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: var(--bg-surface); /* Checkbox içi temaya göre değişir */
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.plan-checkbox-wrapper input:checked ~ .plan-custom-checkbox {
+    background-color: var(--color-purple, #818cf8);
+    border-color: var(--color-purple, #818cf8);
+}
+.plan-custom-checkbox:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+.plan-checkbox-wrapper input:checked ~ .plan-custom-checkbox:after {
+    display: block;
+}
+.plan-text {
+    font-size: 13px;
+    color: var(--text-primary);
+    line-height: 1.4;
+    word-break: break-word;
+}
+.plan-item.checked .plan-text {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+.plan-btn-delete {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+.plan-btn-delete:active {
+    opacity: 1;
+}
+.plan-empty-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 8px 0;
+    font-style: italic;
+}

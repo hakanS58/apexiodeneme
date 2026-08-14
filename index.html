@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nodax - Dashboard</title>
+    <script>
+      (function() {
+        var savedTheme = localStorage.getItem("nodax-theme") || "light";
+        document.documentElement.setAttribute("data-theme", savedTheme);
+      })();
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style/indexstyle.css">
+    <link rel="stylesheet" href="style/ayarlar.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script/tema.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800;900&family=Montserrat:ital,wght@1,700;1,800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- =========================
+     APEXIO ONBOARDING
+========================== -->
+
+<div id="onboarding-overlay" class="onboarding-overlay hidden">
+
+    <div class="onboarding-card intro-card">
+
+        <div class="onboarding-logo intro-logo">
+
+            <h1>APEXIO</h1>
+
+
+        </div>
+
+        <div class="onboarding-content">
+
+            <h2>Hoş Geldin 👋</h2>
+
+            <p>
+                Derslerini planla, Pomodoro ile odaklan,
+                notlarını oluştur ve hedeflerine ulaş.
+            </p>
+
+            <label for="onboarding-name-input">
+                Sana nasıl hitap edelim?
+            </label>
+
+            <input
+                type="text"
+                id="onboarding-name-input"
+                maxlength="10"
+                placeholder="Adını yaz...">
+
+            <button
+                id="btn-onboarding-start"
+                class="onboarding-btn-primary">
+
+                Devam Et
+
+            </button>
+
+            <button
+                id="btn-onboarding-guest"
+                class="onboarding-btn-secondary">
+
+                Şimdilik Misafirim
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Üst Başlık (Header - Dokunulmadı) -->
+<header class="app-header">
+    <div class="header-left-space"></div>
+    <div class="logo-animation-wrapper">
+        <h1 class="header-logo" id="header-title">Apexio</h1>
+    </div>
+    <div class="header-blur-light"></div>
+    <div class="header-right-actions">
+        <button id="btn-settings-toggle" class="theme-btn" title="Ayarlar"><i class="fa-solid fa-gear"></i></button>
+    </div>
+</header>
+
+<main class="app-content">
+    <section id="screen-dashboard" class="app-screen active">
+        
+        <!-- Dinamik Selamlama Yapısı -->
+        <div class="dashboard-welcome-area">
+            <div class="dashboard-top-glow"></div>
+            <div class="welcome-text">
+                <h2 id="welcome-greeting">Günaydın! 👋</h2>
+                <p id="welcome-subtext">Bugün çalışmak için mükemmel bir gün.</p>
+            </div>
+        </div>
+
+        <!-- Seri (Streak) Kartı -->
+        <div class="streak-weekly-card">
+            <div class="streak-header-title">
+                <i class="fa-solid fa-fire-flame-curved inline-fire"></i> Giriş Serisi: <span id="streak-count-text">1. Gün</span>
+            </div>
+            <div class="streak-days-row scrollable-streak-row" id="streak-days-row"></div>
+        </div>
+
+        <!-- Hızlı Erişim Kısayol Tuşları -->
+        <div class="quick-shortcuts-container">
+            <a href="araclar.html?tool=pomodoro" class="shortcut-btn btn-pomo">
+                <i class="fa-solid fa-stopwatch"></i>
+                <span>Pomodoro</span>
+            </a>
+            <a href="araclar.html?tool=notes" class="shortcut-btn btn-note">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>Not Oluştur</span>
+            </a>
+        </div>
+
+        <!-- Dashboard Bilgi Kartları -->
+        <div class="dashboard-large-grid">
+            <!-- Pomodoro Kartı -->
+<div class="dash-large-card card-purple pomodoro-card">
+
+    <div class="pomodoro-bg-icon">
+        <i class="fa-solid fa-stopwatch"></i>
+    </div>
+
+    <div class="live-status">
+        <span class="live-dot"></span>
+        Bugünkü Odak
+    </div>
+
+    <h2 id="dash-pomodoro-status">
+        0 dk
+    </h2>
+
+    <p id="pomodoro-desc">
+        Hedefine doğru ilerliyorsun.
+    </p>
+
+    <div class="pomo-progress">
+
+        <div class="pomo-progress-top">
+
+            <span id="pomo-current">
+                0 dk
+            </span>
+
+<div class="pomo-goal-row">
+
+    <span id="pomo-goal">
+        120 dk
+    </span>
+
+    <i id="edit-pomo-goal"
+       class="fa-solid fa-pen editable-goal-icon">
+    </i>
+</div>
+
+
+        </div>
+
+        <div class="pomo-progress-bar">
+
+            <div
+                id="pomo-progress-fill"
+                class="pomo-progress-fill">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+            <!-- Günlük Plan Kartı -->
+<!-- PLAN KARTI -->
+<div class="dash-large-card card-green modern-plan-card" id="dash-plan-card">
+
+    <div class="card-header-main">
+
+        <div class="card-icon-wrapper">
+            <i class="fa-solid fa-list-check"></i>
+        </div>
+
+        <span class="card-tag" id="dash-current-day-tag">
+            Bugün
+        </span>
+
+    </div>
+
+    <div class="card-body-main">
+
+        <div class="live-status green-status">
+
+            <span class="live-dot"></span>
+
+            Bugünkü Planların
+
+        </div>
+
+        <h3 id="dash-plan-status">
+            Plan bulunamadı
+        </h3>
+
+        <p id="dash-plan-desc">
+            Henüz plan eklemedin.
+        </p>
+
+        <!-- İLERLEME -->
+
+        <div class="plan-progress">
+
+            <div class="plan-progress-top">
+
+                <span id="plan-progress-text">
+
+                    0 / 0 Tamamlandı
+
+                </span>
+
+                <span id="plan-progress-percent">
+
+                    %0
+
+                </span>
+
+            </div>
+
+            <div class="plan-progress-bar">
+
+                <div
+                    id="plan-progress-fill"
+                    class="plan-progress-fill">
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <a
+            href="araclar.html?tool=plans"
+            class="dash-card-action-btn">
+
+            Planları Aç
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</div>
+
+            <!-- Sınav Takvimi Kartı -->
+<div class="dash-large-card modern-exam-card" card-blue>
+
+    <div class="card-header-main">
+
+        <div class="card-icon-wrapper">
+            <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+
+        <span class="card-tag">
+            Yakında
+        </span>
+
+    </div>
+
+    <div class="card-body-main">
+
+        <div class="live-status purple-status">
+
+            <span class="live-dot"></span>
+
+            Yaklaşan Sınavlar (Son 30 gün)
+
+        </div>
+
+        <h3 id="dash-exam-status">
+
+            Yaklaşan sınavın yok
+
+        </h3>
+
+        <ul id="dash-exam-list"
+            class="modern-exam-list">
+
+        </ul>
+
+        <a
+    href="araclar.html?tool=calendar"
+    class="dash-card-action-btn exam-card-btn">
+
+    Sınavları Aç
+
+    <i class="fa-solid fa-arrow-right"></i>
+
+</a>
+
+    </div>
+
+</div>
+        </div>
+
+        <!-- Haftalık Performans Grafiği -->
+        <div class="dashboard-chart-section">
+<div class="chart-header">
+
+<h3>
+
+<i class="fa-solid fa-chart-simple"></i>
+
+Haftalık Çalışma Analizi
+
+</h3>
+
+<p>Son 7 gündeki odaklanma performansın</p>
+
+</div>
+            <div class="chart-container-wrapper">
+                <canvas id="weeklyActivityChart"></canvas>
+            </div>
+        </div>
+
+    </section>
+</main>
+
+<!-- Alt Menü (Aynen Korundu) -->
+<nav class="android-nav-bar">
+    <a href="index.html" class="nav-item active">
+        <i class="fa-solid fa-house"></i>
+        <span>Ana Sayfa</span>
+    </a>
+    <a href="araclar.html" class="nav-item">
+        <i class="fa-solid fa-toolbox"></i>
+        <span>Araçlar</span>
+    </a>
+      <a href="mola.html" class="nav-item"> 
+        <i class="fa-solid fa-gamepad"></i> 
+        <span>Mola</span> 
+    </a>
+    <a href="profil.html" class="nav-item">
+        <i class="fa-solid fa-user"></i>
+        <span>Profil</span>
+    </a>
+</nav>
+
+<!-- Ayarlar Modalı (Aynen Korundu) -->
+<div id="settings-modal" class="auth-modal-overlay hidden">
+    <div class="auth-modal-sheet">
+        <div class="auth-sheet-header">
+            <div class="sheet-notch"></div>
+            <h3>Ayarlar</h3>
+            <button id="btn-close-settings" class="close-auth-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="settings-modal-body" style="padding: 10px 0;">
+            <label style="font-weight: 600; font-size: 14px; margin-bottom: 10px; display: block;">Görünüm Teması</label>
+            <div class="theme-select-options" style="display: flex; gap: 10px;">
+                <button id="btn-theme-light" class="theme-option-btn" style="flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-weight: 600; cursor: pointer;">
+                    <i class="fa-solid fa-sun"></i> Aydınlık
+                </button>
+                <button id="btn-theme-dark" class="theme-option-btn" style="flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-weight: 600; cursor: pointer;">
+                    <i class="fa-solid fa-moon"></i> Karanlık
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="goal-modal" class="goal-modal hidden">
+
+    <div class="goal-box">
+
+        <h3>🎯 Günlük Hedef</h3>
+
+        <p>Kaç dakika çalışmak istiyorsun?</p>
+
+        <input
+            id="goal-input"
+            type="number"
+            min="10"
+            max="1440"
+            placeholder="120">
+
+        <div class="goal-buttons">
+
+            <button id="goal-cancel">
+                Vazgeç
+            </button>
+
+            <button id="goal-save">
+                Kaydet
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<div id="toast-container" class="toast-container"></div>
+<script src="script/indexscript.js"></script>
+</body>
+</html>

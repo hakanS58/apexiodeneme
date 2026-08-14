@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nodax - Şifreli Günlük</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger-color: #ef4444;
+            --success-color: #22c55e;
+            
+            /* Defter Renkleri */
+            --paper-bg: #fdfbf7;
+            --paper-line: #e2dcd5;
+            --paper-margin-line: #f87171;
+            --paper-text: #2d3748;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none; /* Metin seçimini engelle (mobil hissi için) */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Mobil Cihaz Container */
+        .phone-container {
+            width: 100%;
+            height: 100vh;
+            max-width: 480px;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            perspective: 1200px;
+        }
+
+        /* Ekranlar */
+        .screen {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* Başlıklar */
+        .brand-title {
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+        }
+
+        .screen-title {
+            font-size: 20px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 24px;
+            color: var(--text-color);
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        /* Form Elemanları */
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--card-bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            color: var(--text-color);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            user-select: text; /* Bu alanlarda klavyeye izin ver */
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: var(--primary-color);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin-top: 10px;
+        }
+
+        button:active {
+            background-color: var(--primary-hover);
+        }
+
+        .text-btn {
+            background: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 16px;
+            text-decoration: underline;
+            font-weight: normal;
+            border: none;
+            cursor: pointer;
+            width: auto;
+        }
+
+        /* --- KEYPAD / PIN-PAD TASARIMI --- */
+        .pin-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 30px;
+            height: 20px;
+            align-items: center;
+        }
+
+        .pin-dot {
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            transition: background-color 0.15s, border-color 0.15s;
+        }
+
+        .pin-dot.filled {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 8px var(--primary-color);
+        }
+
+        .pin-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .pin-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 50%;
+            aspect-ratio: 1;
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.1s;
+            margin: 0;
+            padding: 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        }
+
+        .pin-btn:active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .pin-btn.action-btn {
+            background: none;
+            box-shadow: none;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .pin-btn.action-btn:active {
+            background: none;
+            color: var(--text-color);
+        }
+
+        /* --- KÜTÜPHANE EKRANI --- */
+        .library-screen {
+            justify-content: flex-start;
+            padding-top: 20px;
+            align-items: stretch;
+        }
+
+        .library-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--card-bg);
+        }
+
+        .library-header h2 {
+            font-size: 20px;
+        }
+
+        .logout-btn {
+            background: none;
+            color: var(--danger-color);
+            font-size: 14px;
+            width: auto;
+            margin: 0;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .diaries-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+            padding: 4px;
+        }
+
+        .diary-book-item {
+            background: linear-gradient(135deg, #3b2314, #2c1a0e);
+            border-radius: 12px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3), inset -10px 0 10px rgba(0,0,0,0.5);
+            cursor: pointer;
+            position: relative;
+            border-left: 6px solid var(--primary-color);
+            transition: transform 0.2s;
+        }
+
+        .diary-book-item:active {
+            transform: scale(0.95);
+        }
+
+        .diary-book-title {
+            color: #f3e5ab;
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 1.3;
+            word-break: break-word;
+        }
+
+        .diary-book-pages {
+            color: #a89f91;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .delete-diary-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger-color);
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        /* --- DEFTER TASARIMI --- */
+        .diary-screen {
+            justify-content: flex-start;
+            padding: 16px;
+            height: 100%;
+            align-items: stretch;
+        }
+
+        .diary-header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .back-to-library-btn {
+            background: none;
+            color: var(--primary-color);
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: auto;
+            margin: 0;
+            padding: 0;
+        }
+
+        .diary-header-nav h2 {
+            font-size: 16px;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 60%;
+            text-align: right;
+        }
+
+        .book-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            background: #2e1f10;
+            padding: 6px;
+            border-radius: 16px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .notebook-page {
+            flex: 1;
+            background-color: var(--paper-bg);
+            background-image: 
+                linear-gradient(var(--paper-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--paper-margin-line) 1px, transparent 1px);
+            background-size: 100% 28px, 100% 100%;
+            background-position: 0 40px, 40px 0;
+            border-radius: 12px;
+            padding: 16px 16px 16px 50px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transform-origin: left center;
+            transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.4s;
+            backface-visibility: hidden;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.15);
+        }
+
+        .notebook-page.flip-next {
+            transform: rotateY(-120deg);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .notebook-page.flip-prev {
+            transform: rotateY(120deg);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .page-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            height: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .page-date {
+            font-size: 13px;
+            font-weight: 700;
+            color: #8b5a2b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .page-lock-status {
+            font-size: 12px;
+            font-weight: bold;
+            color: #7f8c8d;
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .page-lock-status.locked {
+            display: flex;
+            color: #d35400;
+        }
+
+        .page-textarea {
+            flex: 1;
+            background: transparent;
+            border: none;
+            resize: none;
+            outline: none;
+            font-size: 16px;
+            line-height: 28px;
+            color: var(--paper-text);
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            padding: 0;
+            margin-top: 4px;
+            user-select: text;
+        }
+
+        .page-textarea:read-only {
+            color: #7f8c8d; /* Salt okunur olduğunda metin rengi daha pasif olur */
+        }
+
+        .char-warning {
+            position: absolute;
+            bottom: 45px;
+            left: 50px;
+            right: 16px;
+            font-size: 12px;
+            color: var(--danger-color);
+            background: rgba(255, 235, 235, 0.9);
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .page-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 35px;
+            margin-top: auto;
+            border-top: 1px dashed var(--paper-line);
+            padding-top: 6px;
+        }
+
+        .page-number {
+            font-size: 13px;
+            color: #888;
+            font-weight: 600;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            background: #8b5a2b;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: auto;
+            margin: 0;
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .add-page-btn {
+            background-color: var(--success-color);
+        }
+
+        /* --- MOBİL UYUMLU POPUP / MODAL --- */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.75);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 24px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 320px;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            animation: modalScaleIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-color);
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .modal-btn-cancel {
+            background-color: #334155;
+            color: var(--text-color);
+        }
+
+        .modal-btn-confirm {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        /* Mesaj Bildirimleri */
+        .message {
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+        .error { color: var(--danger-color); }
+
+        @keyframes modalScaleIn {
+            from { transform: scale(0.85); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Ana Menüye Dönüş Buton Alanı CSS */
+.app-global-back-row {
+    width: 100%;
+    padding: 12px 24px 4px 24px;
+    display: flex;
+    justify-content: flex-start;
+    background-color: var(--bg-color);
+    z-index: 99;
+}
+.global-back-to-index {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.global-back-to-index:active {
+    color: var(--primary-color);
+    background-color: #1e293b;
+}
+    </style>
+</head>
+<body>
+
+    
+<!-- Değiştirilecek Hatalı Bölümün Doğru Hali -->
+<div class="phone-container">
+
+    <!-- ANA EKRANA GERİ DÖNÜŞ BUTONU -->
+    <div class="app-global-back-row">
+        <a href="araclar.html" class="global-back-to-index">
+            <span style="font-size: 18px; margin-right: 6px;">X</span> Çıkış Yap
+        </a>
+    </div>
+    
+    <!-- Üstteki mükerrer ve yarım kalan div silindi, doğrudan temiz kurulum ekranı başlıyor -->
+    <div id="screen-setup" class="screen">
+        <h1 class="brand-title">NODAX</h1>
+        <h2 class="screen-title">Şifre Belirleyin</h2>
+        <p id="setup-instruction" class="subtitle">Lütfen 4 ila 6 haneli bir giriş şifresi seçin.</p>
+        
+        <div class="pin-indicator" id="setup-indicator">
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+        </div>
+
+        <div class="pin-pad">
+            <button class="pin-btn" onclick="pressPin('1')">1</button>
+            <button class="pin-btn" onclick="pressPin('2')">2</button>
+            <button class="pin-btn" onclick="pressPin('3')">3</button>
+            <button class="pin-btn" onclick="pressPin('4')">4</button>
+            <button class="pin-btn" onclick="pressPin('5')">5</button>
+            <button class="pin-btn" onclick="pressPin('6')">6</button>
+            <button class="pin-btn" onclick="pressPin('7')">7</button>
+            <button class="pin-btn" onclick="pressPin('8')">8</button>
+            <button class="pin-btn" onclick="pressPin('9')">9</button>
+            <button class="pin-btn action-btn" onclick="clearPin()">Sil</button>
+            <button class="pin-btn" onclick="pressPin('0')">0</button>
+            <button class="pin-btn action-btn" id="setup-next-btn" style="color: var(--success-color); font-weight: bold;" onclick="submitSetupPassword()">Tamam</button>
+        </div>
+
+        <div id="setup-animal-group" class="form-group" style="display:none; margin-top:20px;">
+            <label for="setup-animal-input">Kurtarma Sorusu: En sevdiğiniz hayvan hangisidir?</label>
+            <input type="text" id="setup-animal-input" placeholder="Örn: Kedi, Köpek, Kaplan">
+            <button onclick="saveSetup()" style="margin-top:15px;">Kurulumu Tamamla</button>
+        </div>
+
+        <div id="setup-msg" class="message error"></div>
+    </div> <!-- screen-setup bitişi -->
+
+    <div id="screen-login" class="screen">
+        <h1 class="brand-title">NODAX</h1>
+        <h2 class="screen-title">Giriş Şifresi</h2>
+        
+        <div class="pin-indicator" id="login-indicator">
+            </div>
+
+        <div class="pin-pad">
+            <button class="pin-btn" onclick="pressLoginPin('1')">1</button>
+            <button class="pin-btn" onclick="pressLoginPin('2')">2</button>
+            <button class="pin-btn" onclick="pressLoginPin('3')">3</button>
+            <button class="pin-btn" onclick="pressLoginPin('4')">4</button>
+            <button class="pin-btn" onclick="pressLoginPin('5')">5</button>
+            <button class="pin-btn" onclick="pressLoginPin('6')">6</button>
+            <button class="pin-btn" onclick="pressLoginPin('7')">7</button>
+            <button class="pin-btn" onclick="pressLoginPin('8')">8</button>
+            <button class="pin-btn" onclick="pressLoginPin('9')">9</button>
+            <button class="pin-btn action-btn" onclick="clearLoginPin()">Sil</button>
+            <button class="pin-btn" onclick="pressLoginPin('0')">0</button>
+            <button class="pin-btn action-btn" onclick="submitLogin()">Giriş</button>
+        </div>
+
+        <button class="text-btn" onclick="switchScreen('screen-forgot')">Şifremi Unuttum</button>
+        <div id="login-msg" class="message error"></div>
+    </div>
+
+    <div id="screen-forgot" class="screen">
+        <h1 class="brand-title">NODAX</h1>
+        <h2 class="screen-title">Güvenlik Doğrulaması</h2>
+        <p class="subtitle">Şifrenizi sıfırlamak için kurulumda yazdığınız hayvanı girin.</p>
+
+        <div class="form-group">
+            <label for="forgot-animal-input">Güvenlik Yanıtınız Nedir?</label>
+            <input type="text" id="forgot-animal-input" placeholder="Yanıtınızı buraya yazın">
+        </div>
+
+        <button onclick="verifySecretAnimal()">Doğrula</button>
+        <button class="text-btn" onclick="switchScreen('screen-login')">Geri Dön</button>
+        <div id="forgot-msg" class="message error"></div>
+    </div>
+
+    <div id="screen-reset" class="screen">
+        <h1 class="brand-title">NODAX</h1>
+        <h2 class="screen-title">Yeni Şifre Belirle</h2>
+        <p class="subtitle">Lütfen 4 ila 6 haneli yeni bir şifre girin.</p>
+
+        <div class="pin-indicator" id="reset-indicator">
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+        </div>
+
+        <div class="pin-pad">
+            <button class="pin-btn" onclick="pressResetPin('1')">1</button>
+            <button class="pin-btn" onclick="pressResetPin('2')">2</button>
+            <button class="pin-btn" onclick="pressResetPin('3')">3</button>
+            <button class="pin-btn" onclick="pressResetPin('4')">4</button>
+            <button class="pin-btn" onclick="pressResetPin('5')">5</button>
+            <button class="pin-btn" onclick="pressResetPin('6')">6</button>
+            <button class="pin-btn" onclick="pressResetPin('7')">7</button>
+            <button class="pin-btn" onclick="pressResetPin('8')">8</button>
+            <button class="pin-btn" onclick="pressResetPin('9')">9</button>
+            <button class="pin-btn action-btn" onclick="clearResetPin()">Sil</button>
+            <button class="pin-btn" onclick="pressResetPin('0')">0</button>
+            <button class="pin-btn action-btn" style="color: var(--success-color); font-weight: bold;" onclick="saveNewPassword()">Kaydet</button>
+        </div>
+        <div id="reset-msg" class="message error"></div>
+    </div>
+
+    <div id="screen-library" class="screen library-screen">
+        <div class="library-header">
+            <h2>Nodax Kitaplığım</h2>
+            <button class="logout-btn" onclick="lockApp()">Kilitle</button>
+        </div>
+
+        <div class="diaries-grid" id="diaries-grid"></div>
+
+        <button onclick="switchScreen('screen-create-diary')">+ Yeni Günlük Oluştur</button>
+    </div>
+
+    <div id="screen-create-diary" class="screen">
+        <h1 class="brand-title">NODAX</h1>
+        <h2 class="screen-title">Bir Günlük Oluşturun</h2>
+        <p class="subtitle">Anılarınız için bu deftere benzersiz bir isim verin.</p>
+
+        <div class="form-group">
+            <label for="diary-name-input">Günlüğünüzün Adı</label>
+            <input type="text" id="diary-name-input" placeholder="Örn: Kişisel Notlarım">
+        </div>
+
+        <button onclick="createNewDiary()">Günlüğü Oluştur</button>
+        <button class="text-btn" onclick="switchScreen('screen-library')">İptal Et</button>
+    </div>
+
+    <div id="screen-diary" class="screen diary-screen">
+        <div class="diary-header-nav">
+            <button class="back-to-library-btn" onclick="backToLibrary()">‹ Günlüklerim</button>
+            <h2 id="diary-title-display">Günlük Adı</h2>
+        </div>
+
+        <div class="book-container">
+            <div class="notebook-page" id="notebook-page">
+                <div class="page-header-row">
+                    <div class="page-date" id="page-date">Yükleniyor...</div>
+                    <div class="page-lock-status" id="page-lock-status">🔒 Arşivlendi</div>
+                </div>
+
+                <textarea class="page-textarea" id="page-textarea" placeholder="Buraya yazmaya başla..." oninput="handleTyping(this)"></textarea>
+
+                <div class="char-warning" id="char-warning">Bu sayfa doldu. Lütfen yeni sayfaya geçin.</div>
+
+                <div class="page-footer">
+                    <span class="page-number" id="page-number">S. 1</span>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" id="btn-prev" onclick="goToPage('prev')">Geri</button>
+                        <button class="nav-btn" id="btn-next" onclick="goToPage('next')">İleri</button>
+                        <button class="nav-btn add-page-btn" id="btn-add" onclick="addNewPage()">Sayfa Ekle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal-card">
+            <div class="modal-title" id="modal-title">Emin misiniz?</div>
+            <div class="modal-text" id="modal-text">Bu öğeyi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.</div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" onclick="closeConfirmModal()">İptal</button>
+                <button class="modal-btn modal-btn-confirm" id="modal-confirm-btn">Sil</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Global Değişkenler
+    let currentDiaryId = null;
+    let currentPageIndex = 0;
+    let diariesList = [];
+    const CHAR_LIMIT_PER_PAGE = 380;
+
+    // PIN Kontrol Değişkenleri
+    let pinSetupValue = "";
+    let pinLoginValue = "";
+    let pinResetValue = "";
+    
+    // Popup İşlemi için Callback
+    let modalCallback = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        initApp();
+    });
+
+    function initApp() {
+        const hasPassword = localStorage.getItem("nodax_password");
+        if (!hasPassword) {
+            switchScreen('screen-setup');
+            resetPinSetup();
+        } else {
+            switchScreen('screen-login');
+            buildLoginDots();
+        }
+    }
+
+    function switchScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        document.getElementById(screenId).classList.add('active');
+        document.querySelectorAll('.message').forEach(msg => msg.style.display = 'none');
+    }
+
+    // --- ÖZEL MODAL POPUP SİSTEMİ (Windows Alert Alternatifi) ---
+    function showConfirmModal(title, text, onConfirm) {
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-text').textContent = text;
+        document.getElementById('confirm-modal').classList.add('active');
+        modalCallback = onConfirm;
+    }
+
+    function closeConfirmModal() {
+        document.getElementById('confirm-modal').classList.remove('active');
+        modalCallback = null;
+    }
+
+    document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+        if (modalCallback) {
+            modalCallback();
+        }
+        closeConfirmModal();
+    });
+
+    // --- 1. PIN SETUP (ŞİFRE OLUŞTURMA) İŞLEMLERİ ---
+    function resetPinSetup() {
+        pinSetupValue = "";
+        updatePinDots('setup-indicator', pinSetupValue);
+        document.getElementById('setup-animal-group').style.display = "none";
+        document.getElementById('setup-animal-input').value = "";
+        document.getElementById('setup-instruction').style.display = "block";
+        document.getElementById('setup-indicator').style.display = "flex";
+        document.querySelectorAll('#screen-setup .pin-pad').forEach(p => p.style.display = "grid");
+    }
+
+    function pressPin(num) {
+        if (pinSetupValue.length < 6) {
+            pinSetupValue += num;
+            updatePinDots('setup-indicator', pinSetupValue);
+        }
+    }
+
+    function clearPin() {
+        if (pinSetupValue.length > 0) {
+            pinSetupValue = pinSetupValue.slice(0, -1);
+            updatePinDots('setup-indicator', pinSetupValue);
+        }
+    }
+
+    function updatePinDots(indicatorId, value) {
+        const dots = document.querySelectorAll(`#${indicatorId} .pin-dot`);
+        dots.forEach((dot, index) => {
+            if (index < value.length) {
+                dot.classList.add('filled');
+            } else {
+                dot.classList.remove('filled');
+            }
+        });
+    }
+
+    function submitSetupPassword() {
+        const msgDiv = document.getElementById('setup-msg');
+        msgDiv.style.display = "none";
+
+        if (pinSetupValue.length < 4 || pinSetupValue.length > 6) {
+            msgDiv.textContent = "Şifreniz en az 4, en fazla 6 karakter olmalıdır.";
+            msgDiv.style.display = "block";
+            return;
+        }
+
+        // Şifre adımı başarılı, güvenlik sorusu girişine geçiş yap
+        document.getElementById('setup-instruction').style.display = "none";
+        document.getElementById('setup-indicator').style.display = "none";
+        document.querySelector('#screen-setup .pin-pad').style.display = "none";
+        document.getElementById('setup-animal-group').style.display = "block";
+    }
+
+    function saveSetup() {
+        const animalVal = document.getElementById('setup-animal-input').value.trim();
+        const msgDiv = document.getElementById('setup-msg');
+
+        if (!animalVal) {
+            msgDiv.textContent = "Lütfen kurtarma sorusu cevabınızı yazın.";
+            msgDiv.style.display = "block";
+            return;
+        }
+
+        localStorage.setItem("nodax_password", pinSetupValue);
+        localStorage.setItem("nodax_animal", animalVal);
+        
+        resetPinSetup();
+        initApp();
+    }
+
+    // --- 2. PIN LOGIN (ŞİFRE GİRİŞ) İŞLEMLERİ ---
+    function buildLoginDots() {
+        const savedPass = localStorage.getItem("nodax_password") || "0000";
+        const indicator = document.getElementById('login-indicator');
+        indicator.innerHTML = "";
+        pinLoginValue = "";
+        for (let i = 0; i < savedPass.length; i++) {
+            const dot = document.createElement('div');
+            dot.className = "pin-dot";
+            indicator.appendChild(dot);
+        }
+    }
+
+    function pressLoginPin(num) {
+        const savedPass = localStorage.getItem("nodax_password") || "";
+        if (pinLoginValue.length < savedPass.length) {
+            pinLoginValue += num;
+            updatePinDots('login-indicator', pinLoginValue);
+        }
+    }
+
+    function clearLoginPin() {
+        if (pinLoginValue.length > 0) {
+            pinLoginValue = pinLoginValue.slice(0, -1);
+            updatePinDots('login-indicator', pinLoginValue);
+        }
+    }
+
+    function submitLogin() {
+        const savedPass = localStorage.getItem("nodax_password");
+        const msgDiv = document.getElementById('login-msg');
+
+        if (pinLoginValue === savedPass) {
+            buildLoginDots();
+            loadLibrary();
+        } else {
+            msgDiv.textContent = "Hatalı şifre!";
+            msgDiv.style.display = "block";
+            pinLoginValue = "";
+            updatePinDots('login-indicator', pinLoginValue);
+        }
+    }
+
+    // --- 3. ŞİFRE SIFIRLAMA VE YENİ PIN BELİRLEME ---
+    function verifySecretAnimal() {
+        const inputAnimal = document.getElementById('forgot-animal-input').value.trim().toLowerCase();
+        const savedAnimal = (localStorage.getItem("nodax_animal") || "").trim().toLowerCase();
+        const msgDiv = document.getElementById('forgot-msg');
+
+        if (inputAnimal && inputAnimal === savedAnimal) {
+            document.getElementById('forgot-animal-input').value = "";
+            pinResetValue = "";
+            updatePinDots('reset-indicator', pinResetValue);
+            switchScreen('screen-reset');
+        } else {
+            msgDiv.textContent = "Girdiğiniz yanıt sistemdekiyle eşleşmedi.";
+            msgDiv.style.display = "block";
+        }
+    }
+
+    function pressResetPin(num) {
+        if (pinResetValue.length < 6) {
+            pinResetValue += num;
+            updatePinDots('reset-indicator', pinResetValue);
+        }
+    }
+
+    function clearResetPin() {
+        if (pinResetValue.length > 0) {
+            pinResetValue = pinResetValue.slice(0, -1);
+            updatePinDots('reset-indicator', pinResetValue);
+        }
+    }
+
+    function saveNewPassword() {
+        const msgDiv = document.getElementById('reset-msg');
+        msgDiv.style.display = "none";
+
+        if (pinResetValue.length < 4 || pinResetValue.length > 6) {
+            msgDiv.textContent = "Şifreniz en az 4, en fazla 6 karakter olmalıdır.";
+            msgDiv.style.display = "block";
+            return;
+        }
+
+        localStorage.setItem("nodax_password", pinResetValue);
+        pinResetValue = "";
+        initApp();
+    }
+
+    // --- 4. KÜTÜPHANE VE YENİ GÜNLÜK İŞLEMLERİ ---
+    function loadLibrary() {
+        diariesList = JSON.parse(localStorage.getItem("nodax_diaries")) || [];
+        const grid = document.getElementById('diaries-grid');
+        grid.innerHTML = "";
+
+        if (diariesList.length === 0) {
+            grid.innerHTML = `<p style="grid-column: span 2; text-align:center; color:var(--text-muted); font-size:14px; margin-top:40px;">Henüz hiç günlüğünüz yok. Başlamak için yeni bir tane oluşturun.</p>`;
+            switchScreen('screen-library');
+            return;
+        }
+
+        diariesList.forEach(diary => {
+            const bookItem = document.createElement('div');
+            bookItem.className = 'diary-book-item';
+            bookItem.setAttribute('onclick', `openDiary('${diary.id}')`);
+            bookItem.innerHTML = `
+                <button class="delete-diary-btn" onclick="deleteDiary(event, '${diary.id}')">✕</button>
+                <div class="diary-book-title">${escapeHTML(diary.title)}</div>
+                <div class="diary-book-pages">${diary.pages.length} Sayfa</div>
+            `;
+            grid.appendChild(bookItem);
+        });
+
+        switchScreen('screen-library');
+    }
+
+    function createNewDiary() {
+        const nameInput = document.getElementById('diary-name-input');
+        const title = nameInput.value.trim();
+        if (!title) return;
+
+        const newDiary = {
+            id: 'diary_' + Date.now(),
+            title: title,
+            pages: [
+                { date: getTodayDateString(), text: "" },
+                { date: getTodayDateString(), text: "" }
+            ]
+        };
+
+        diariesList.push(newDiary);
+        saveDiariesToStorage();
+        
+        nameInput.value = "";
+        loadLibrary();
+    }
+
+    function deleteDiary(event, diaryId) {
+        event.stopPropagation();
+        
+        showConfirmModal(
+            "Günlüğü Sil",
+            "Bu günlüğü ve içindeki tüm yazıları kalıcı olarak silmek istediğinizden emin misiniz?",
+            () => {
+                diariesList = diariesList.filter(d => d.id !== diaryId);
+                saveDiariesToStorage();
+                loadLibrary();
+            }
+        );
+    }
+
+    function openDiary(diaryId) {
+        const diary = diariesList.find(d => d.id === diaryId);
+        if (!diary) return;
+
+        currentDiaryId = diaryId;
+        currentPageIndex = 0;
+
+        document.getElementById('diary-title-display').textContent = diary.title;
+        renderPage();
+        switchScreen('screen-diary');
+    }
+
+    function backToLibrary() {
+        currentDiaryId = null;
+        loadLibrary();
+    }
+
+    function getTodayDateString() {
+        const now = new Date();
+        return now.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    // --- 5. TEKİL DEFTER / SAYFA YÖNETİMİ VE TARİH KONTROLLERİ ---
+    function renderPage() {
+        const diary = diariesList.find(d => d.id === currentDiaryId);
+        if (!diary) return;
+
+        const page = diary.pages[currentPageIndex];
+        const textarea = document.getElementById('page-textarea');
+        const dateElement = document.getElementById('page-date');
+        const pageNumElement = document.getElementById('page-number');
+        const warningElement = document.getElementById('char-warning');
+        const lockStatusElement = document.getElementById('page-lock-status');
+
+        dateElement.textContent = page.date;
+        textarea.value = page.text;
+        pageNumElement.textContent = `Sayfa ${currentPageIndex + 1} / ${diary.pages.length}`;
+        warningElement.style.display = "none";
+
+        // GÜNCELLEME: Tarih Kontrolü ve Salt Okunurluk Sınırı
+        const todayStr = getTodayDateString();
+        // Eğer sayfaya daha önce yazı yazılmışsa ve sayfa tarihi bugünden farklıysa salt okunur yap
+        if (page.text.length > 0 && page.date !== todayStr) {
+            textarea.readOnly = true;
+            lockStatusElement.classList.add('locked');
+        } else {
+            textarea.readOnly = false;
+            lockStatusElement.classList.remove('locked');
+        }
+
+        document.getElementById('btn-prev').disabled = (currentPageIndex === 0);
+        document.getElementById('btn-next').disabled = (currentPageIndex === diary.pages.length - 1);
+    }
+
+    function handleTyping(textarea) {
+        const diary = diariesList.find(d => d.id === currentDiaryId);
+        if (!diary) return;
+
+        const warningElement = document.getElementById('char-warning');
+        
+        if (textarea.value.length >= CHAR_LIMIT_PER_PAGE) {
+            textarea.value = textarea.value.substring(0, CHAR_LIMIT_PER_PAGE);
+            warningElement.style.display = "block";
+        } else {
+            warningElement.style.display = "none";
+        }
+
+        diary.pages[currentPageIndex].text = textarea.value;
+
+        // Sadece yeni sayfalara ilk harf yazıldığında bugünün tarihini atar.
+        // Salt okunur engeli sayesinde geçmiş sayfalara zaten müdahale edilemez.
+        const todayStr = getTodayDateString();
+        if (diary.pages[currentPageIndex].date !== todayStr && textarea.value.length > 0) {
+            diary.pages[currentPageIndex].date = todayStr;
+            document.getElementById('page-date').textContent = todayStr;
+        }
+
+        saveDiariesToStorage();
+    }
+
+    function addNewPage() {
+        const diary = diariesList.find(d => d.id === currentDiaryId);
+        if (!diary) return;
+
+        const newPage = {
+            date: getTodayDateString(),
+            text: ""
+        };
+        diary.pages.push(newPage);
+        saveDiariesToStorage();
+
+        triggerFlipAnimation('next', () => {
+            currentPageIndex = diary.pages.length - 1;
+            renderPage();
+        });
+    }
+
+    function goToPage(direction) {
+        const diary = diariesList.find(d => d.id === currentDiaryId);
+        if (!diary) return;
+
+        if (direction === 'prev' && currentPageIndex > 0) {
+            triggerFlipAnimation('prev', () => {
+                currentPageIndex--;
+                renderPage();
+            });
+        } else if (direction === 'next' && currentPageIndex < diary.pages.length - 1) {
+            triggerFlipAnimation('next', () => {
+                currentPageIndex++;
+                renderPage();
+            });
+        }
+    }
+
+    function triggerFlipAnimation(direction, callback) {
+        const pageEl = document.getElementById('notebook-page');
+        if (direction === 'next') {
+            pageEl.classList.add('flip-next');
+        } else {
+            pageEl.classList.add('flip-prev');
+        }
+
+        setTimeout(() => {
+            callback();
+            pageEl.classList.remove('flip-next', 'flip-prev');
+        }, 300);
+    }
+
+    function saveDiariesToStorage() {
+        localStorage.setItem("nodax_diaries", JSON.stringify(diariesList));
+    }
+
+    function lockApp() {
+        switchScreen('screen-login');
+        buildLoginDots();
+    }
+
+    function escapeHTML(str) {
+        return str.replace(/[&<>'"]/g, 
+            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+    }
+</script>
+
+</body>
+</html>

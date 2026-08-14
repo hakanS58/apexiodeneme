@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nodax - Profilim</title>
+    <!-- FontAwesome İkonları -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Poetsen+One&display=swap" rel="stylesheet">
+    <!-- Ana CSS -->
+    <link rel="stylesheet" href="style/profil.css">
+</head>
+<body>
+
+    <!-- Üst Başlık (Header) -->
+    <header class="app-header">
+         <p class="poetsen-one-regular" style="font-size: 20px;" id="header-title">Nodax - Profil <i class="fa-solid fa-user"></i></p>
+    </header>
+
+    <!-- Ana İçerik -->
+    <main class="app-content">
+
+        <!-- 1. Profil Kartı ve İsim Alanı -->
+        <section class="profile-hero-card">
+            <div class="avatar-container">
+                <div class="profile-avatar-circle">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </div>
+            
+            <div class="profile-name-container">
+                <h2 id="profile-display-name" class="profile-name-display">Misafir</h2>
+                <button id="btn-open-edit-name" class="edit-name-btn" title="Adı Değiştir">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+            </div>
+            <span class="profile-badge-tag"><i class="fa-solid fa-graduation-cap"></i> Öğrenci</span>
+        </section>
+
+        <!-- 2. Hızlı Çalışma Özeti -->
+        <section class="profile-section-card">
+            <div class="section-card-title">
+                <i class="fa-solid fa-chart-pie" style="color: var(--color-blue);"></i>
+                <span>Çalışma İstatistikleri</span>
+            </div>
+            <div class="stats-mini-grid">
+                <div class="stat-item-box">
+                    <div class="stat-item-icon icon-purple">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <div class="stat-item-info">
+                        <h4 id="stat-pomo-min">0 Dk</h4>
+                        <p>Odaklanma</p>
+                    </div>
+                </div>
+                <div class="stat-item-box">
+                    <div class="stat-item-icon icon-orange">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <div class="stat-item-info">
+                        <h4 id="stat-streak-count">1 Gün</h4>
+                        <p>Aktif Seri</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 3. İsim Değiştirme Modal (Popup) -->
+    <div id="name-edit-modal" class="custom-modal-overlay hidden">
+        <div class="custom-modal-card">
+            <h3>Adınızı Değiştirin</h3>
+            <p>Lütfen yeni isminizi giriniz (Maks. 15 karakter).</p>
+            <input type="text" id="modal-name-input" maxlength="15" placeholder="İsminiz..." />
+            <div class="modal-actions">
+                <button id="btn-cancel-modal" class="btn-modal-secondary">İptal</button>
+                <button id="btn-save-modal" class="btn-modal-primary">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bildirim Toast Kapsayıcısı -->
+    <div id="toast-container" class="toast-container"></div>
+
+<nav class="android-nav-bar">
+    <a href="index.html" class="nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>Ana Sayfa</span>
+    </a>
+    <a href="araclar.html" class="nav-item">
+        <i class="fa-solid fa-toolbox"></i>
+        <span>Araçlar</span>
+    </a>
+    <a href="profil.html" class="nav-item active">
+            <i class="fa-solid fa-user"></i>
+            <span>Profil</span>
+        </a>
+</nav>
+
+    <!-- Profil Scripti -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // ---- 1. TEMA OKUMA & SENKRONİZASYON ----
+            const savedTheme = localStorage.getItem("nodax-theme") || localStorage.getItem("nodax_theme") || "light";
+            document.documentElement.setAttribute("data-theme", savedTheme);
+
+            // ---- 2. İSİM VE POPUP (MODAL) YÖNETİMİ ----
+            const profileDisplayName = document.getElementById("profile-display-name");
+            const localProfileName = localStorage.getItem("nodax_local_name") || "Öğrenci";
+            
+            if (profileDisplayName) profileDisplayName.textContent = localProfileName;
+
+            const editBtn = document.getElementById("btn-open-edit-name");
+            const modal = document.getElementById("name-edit-modal");
+            const modalInput = document.getElementById("modal-name-input");
+            const btnSave = document.getElementById("btn-save-modal");
+            const btnCancel = document.getElementById("btn-cancel-modal");
+
+            // Modal Aç
+            if (editBtn && modal) {
+                editBtn.addEventListener("click", () => {
+                    if (modalInput) modalInput.value = localStorage.getItem("nodax_local_name") || "";
+                    modal.classList.remove("hidden");
+                });
+            }
+
+            // Modal Kapat (İptal)
+            if (btnCancel && modal) {
+                btnCancel.addEventListener("click", () => {
+                    modal.classList.add("hidden");
+                });
+            }
+
+            // Modal Kaydet (Maksimum 15 Karakter)
+            if (btnSave && modal) {
+                btnSave.addEventListener("click", () => {
+                    if (!modalInput) return;
+                    
+                    const newName = modalInput.value.trim().substring(0, 15);
+
+                    if (newName === "") {
+                        showToast("Lütfen geçerli bir isim girin.");
+                        return;
+                    }
+
+                    localStorage.setItem("nodax_local_name", newName);
+                    if (profileDisplayName) profileDisplayName.textContent = newName;
+                    
+                    modal.classList.add("hidden");
+                    showToast("Profil adı güncellendi! ✨");
+                });
+            }
+
+            // ---- 3. İSTATİSTİK ÖZETLERİ ----
+            const localPomodoro = JSON.parse(localStorage.getItem("nodax_pomodoro_history")) || [];
+            let totalMinutes = 0;
+            localPomodoro.forEach(item => { totalMinutes += (item.duration || 0); });
+            
+            const statPomo = document.getElementById("stat-pomo-min");
+            if (statPomo) statPomo.textContent = `${totalMinutes} Dk`;
+
+            const currentStreak = localStorage.getItem("nodax_streak_count") || "1";
+            const statStreak = document.getElementById("stat-streak-count");
+            if (statStreak) statStreak.textContent = `${currentStreak} Gün`;
+        });
+
+        // Toast Bildirim Fonksiyonu
+        function showToast(message) {
+            const container = document.getElementById("toast-container");
+            if (!container) return;
+
+            const toast = document.createElement("div");
+            toast.className = "toast-message";
+            toast.textContent = message;
+
+            container.appendChild(toast);
+
+            setTimeout(() => { toast.classList.add("show"); }, 50);
+            setTimeout(() => {
+                toast.classList.remove("show");
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

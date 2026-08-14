@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nodax</title>
+    <script>
+  (function() {
+    var savedTheme = localStorage.getItem("nodax-theme") || "light";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+  })();
+</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style/araclar.css">
+    <link rel="stylesheet" href="style/sinavtarihistyle.css">
+    <link rel="stylesheet" href="style/noteditorstyle.css">
+    <link rel="stylesheet" href="style/planvegiris.css">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Poetsen+One&display=swap" rel="stylesheet">
+
+<script src="script/tema.js"></script>
+</head>
+<body>
+
+<header class="app-header">
+    <button id="btn-back" class="back-btn hidden">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <p class="" id="header-title"></p>
+</header>
+
+
+<main class="app-content">
+ <!-- !!! ARAYÜZ EKİPMANLARI !!! -->   
+    <section id="screen-dashboard" class="app-screen active">
+
+        <div class="dashboard-grid">
+            <div class="dash-card" data-target="pomodoro">
+                <div class="card-icon icon-purple"><i class="fa-solid fa-clock"></i></div>
+                <div class="card-info">
+                    <h3>Pomodoro Odaklanma</h3>
+                    <p>Zamanı yönet, dersine odaklan.</p>
+                </div>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </div>
+
+            <div class="dash-card" data-target="notes-dashboard">
+                <div class="card-icon icon-purple">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+                <div class="card-info">
+                    <h3>Notlarım</h3>
+                    <p>Hızlıca not al ve düzenle</p>
+                </div>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </div>
+
+            <div class="dash-card" data-target="plans">
+                <div class="card-icon" style="background: rgba(147, 51, 234, 0.13); color: #a855f7;"><i class="fa-solid fa-list-check"></i></div>
+                <div class="card-info">
+                    <h3>Planlarım</h3>
+                    <p>Haftalık planını yap, hedeflerine ulaş.</p>
+                </div>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </div>
+
+            <div class="dash-card" data-target="calendar">
+                <div class="card-icon icon-green"><i class="fa-solid fa-calendar-days"></i></div>
+                <div class="card-info">
+                    <h3>Sınav Takvimi</h3>
+                    <p>Sınav tarihlerini kaçırma.</p>
+                </div>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </div>
+
+            <div class="dash-card" data-target="calc">
+                <div class="card-icon icon-orange"><i class="fa-solid fa-calculator"></i></div>
+                <div class="card-info">
+                    <h3>Ortalama Hesapla</h3>
+                    <p>Not veya ders ortalamasını hesapla.</p>
+                </div>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </div>
+
+<!-- ESKİ HALİ: <a href="sifreligunluk.html" style="text-decoration: none;">...</a> yerine bunu yazın: -->
+<div class="dash-card" id="btn-go-to-diary" style="cursor: pointer;">
+    <div class="card-icon icon-orange">
+        <i class="fa-solid fa-book"></i>
+    </div>
+    <div class="card-info">
+        <h3>Şifreli Günlük</h3>
+        <p>Düşüncelerini güvenle sakla.</p>
+    </div>
+    <i class="fa-solid fa-chevron-right arrow"></i>
+</div>
+           
+        </div>
+    </section>
+
+    
+<!-- !!! PLAN OLUŞTURMA EKRANI !!! -->
+    <section id="screen-plans" class="app-screen">
+        <div class="calendar-header" style="margin-bottom: 20px;">
+            <h2>Haftalık Planlarım</h2>
+            <div class="countdown-text" id="plans-weekly-status" style="font-size: 13px; color: var(--text-secondary); font-weight: 600;">Haftalık İlerleme: %0</div>
+        </div>
+
+        <div class="plan-days-container" id="plan-days-container">
+            </div>
+
+        <div id="plan-form-wrapper" class="hidden">
+            <div class="mobile-sheet-overlay" id="plan-sheet-overlay"></div>
+            <div class="mobile-sheet-content">
+                <div class="sheet-header">
+                    <div class="sheet-notch"></div>
+                    <h3 id="plan-sheet-title">Yeni Plan Ekle</h3>
+                </div>
+                
+                <div class="sheet-body">
+                    <input type="hidden" id="plan-selected-day" value="">
+                    
+                    <div class="input-group">
+                        <label for="plan-time">Saat (Opsiyonel)</label>
+                        <input type="time" id="plan-time" style="min-height: 44px; padding: 0 14px; border-radius: 12px; font-size: 14px; background: var(--bg-main, #f8fafc); border: 1px solid var(--border-color, #e2e8f0); color: var(--text-primary); width: 100%; box-sizing: border-box;">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="plan-text">Plan Detayı</label>
+                        <input type="text" id="plan-text" placeholder="Örn: 8.30'da matematik çalış">
+                    </div>
+
+                    <div class="sheet-actions" style="margin-top: 20px;">
+                        <button id="btn-cancel-plan" class="btn-secondary">İptal</button>
+                        <button id="btn-save-plan" class="btn-primary">Planı Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- !!! POMODORO EKRANI !!! -->
+    <section id="screen-pomodoro" class="app-screen">
+        <div class="pomodoro-container">
+            <div class="pomodoro-modes">
+                <button class="mode-btn active" id="mode-work">Çalışma</button>
+                <button class="mode-btn" id="mode-break">Mola</button>
+            </div>
+            
+            <button id="btn-zen-toggle" class="zen-toggle-btn" title="Tam Ekran Odaklanma Modu">
+                <i class="fa-solid fa-expand"></i>
+            </button>
+
+            <div class="timer-circle">
+                <span id="timer-display">25:00</span>
+            </div>
+            
+            <div class="timer-controls">
+                <button id="btn-start" class="control-btn start"><i class="fa-solid fa-play"></i> Başlat</button>
+                <button id="btn-pause" class="control-btn pause hidden"><i class="fa-solid fa-pause"></i> Durdur</button>
+                <button id="btn-reset" class="control-btn reset"><i class="fa-solid fa-rotate-left"></i> Sıfırla</button>
+            </div>
+
+            <div class="pomodoro-settings-toggle">
+                <button id="btn-toggle-settings" class="settings-toggle-btn"><i class="fa-solid fa-sliders"></i> Süreleri Özelleştir</button>
+            </div>
+
+            <div id="pomodoro-settings-panel" class="pomodoro-settings hidden">
+                <div class="settings-group-title">Çalışma Süresi</div>
+                <div class="settings-row">
+                    <div class="settings-sub-group">
+                        <label for="input-work-min">Dakika:</label>
+                        <input type="number" id="input-work-min" min="0" max="180" value="25">
+                    </div>
+                    <div class="settings-sub-group">
+                        <label for="input-work-sec">Saniye:</label>
+                        <input type="number" id="input-work-sec" min="0" max="59" value="0">
+                    </div>
+                </div>
+
+                <div class="settings-group-title">Mola Süresi</div>
+                <div class="settings-row">
+                    <div class="settings-sub-group">
+                        <label for="input-break-min">Dakika:</label>
+                        <input type="number" id="input-break-min" min="0" max="60" value="5">
+                    </div>
+                    <div class="settings-sub-group">
+                        <label for="input-break-sec">Saniye:</label>
+                        <input type="number" id="input-break-sec" min="0" max="59" value="0">
+                    </div>
+                </div>
+                <button id="btn-save-settings" class="save-settings-btn">Uygula ve Kaydet</button>
+            </div>
+        </div>
+
+
+
+
+    </section>
+
+<!-- !!! SINAV TAKVİMİ EKRANI !!! -->
+    <section id="screen-calendar" class="app-screen">
+        <div class="calendar-header">
+            <h2>Sınav Takvimi</h2>
+            <button id="btn-add-exam" class="btn-primary"><i class="fa-solid fa-plus"></i> Sınav Ekle</button>
+        </div>
+
+        <div id="exam-form-wrapper" class="hidden">
+            <div class="mobile-sheet-overlay" id="sheet-overlay"></div>
+            <div class="mobile-sheet-content">
+                <div class="sheet-header">
+                    <div class="sheet-notch"></div>
+                    <h3>Yeni Sınav Ekle</h3>
+                </div>
+                
+                <div class="sheet-body">
+                    <div class="input-group">
+                        <label for="exam-name">Sınav Adı</label>
+                        <input type="text" id="exam-name" placeholder="Örn: Matematik sınavı">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Sınav Tarihi ve Saati</label>
+                        <div class="modern-picker-container">
+                            <div class="picker-wheel">
+                                <select id="picker-year"></select>
+                                <select id="picker-month"></select>
+                                <select id="picker-day"></select>
+                            </div>
+                            <div class="picker-wheel time-picker">
+                                <select id="picker-hour"></select>
+                                <select id="picker-minute"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sheet-actions">
+                        <button id="btn-cancel-exam" class="btn-secondary">İptal</button>
+                        <button id="btn-save-exam" class="btn-primary">Sınavı Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="exams-list-container"></div>
+    </section>
+
+<!-- !!! ORTALAMA HESAPLAMA EKRANI !!! -->
+    <section id="screen-calc" class="app-screen">
+        <div class="calc-wrapper" style="padding: 10px 4px 20px;">
+            <div class="pomodoro-modes" style="margin-bottom: 20px;">
+                <button class="mode-btn active" id="calc-tab-school">Ortaokul / Lise</button>
+                <button class="mode-btn" id="calc-tab-uni">Üniversite (GANO)</button>
+            </div>
+
+            <div id="panel-school-calc" class="calc-panel">
+                <div id="school-lessons-container" style="display: flex; flex-direction: column; gap: 14px;"></div>
+                
+                <button id="btn-add-school-lesson" class="btn-primary" style="width: 100%; margin-top: 15px; min-height: 44px; border-radius: 12px; background: rgba(129,140,248,.13); color: var(--color-purple); box-shadow: none;">
+                    <i class="fa-solid fa-plus"></i> Yeni Ders Ekle
+                </button>
+
+                <div class="exam-card" style="margin: 20px 0 0 0; padding: 16px; flex-direction: column; align-items: flex-start; gap: 6px;">
+                    <h3 style="font-size: 14px; color: var(--text-secondary);">Genel Dönem Ortalaması(Yaklaşık)</h3>
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-top: 4px;">
+                        <span id="school-total-result" style="font-size: 28px; font-weight: 800; color: var(--color-purple);">0.00</span>
+                        <span id="school-status-info" class="countdown-text" style="font-size: 13px; color: var(--text-secondary);">En az 2 ders ekleyin</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="panel-uni-calc" class="calc-panel hidden">
+                <div id="exam-form-wrapper" style="position: static; display: block; padding: 16px; margin-bottom: 16px; border-radius: 18px; box-shadow: none; animation: none;">
+                    <div style="font-weight: 700; font-size: 14px; margin-bottom: 12px; color: var(--text-primary);"><i class="fa-solid fa-sliders"></i> Üniversite Başarı Kriterleri</div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div class="input-group" style="flex: 1; min-width: 120px; margin-bottom: 0;">
+                            <label style="font-size: 11px;">Geçme Notu</label>
+                            <input type="number" id="uni-passing-grade" value="50" min="0" max="100" style="min-height: 38px; padding: 0 10px; margin: 4px 0 0 0; border-radius: 8px; font-size: 13px; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-primary);">
+                        </div>
+                        <div class="input-group" style="flex: 1; min-width: 120px; margin-bottom: 0;">
+                            <label style="font-size: 11px;">Final Barajı</label>
+                            <input type="number" id="uni-final-limit" value="50" min="0" max="100" style="min-height: 38px; padding: 0 10px; margin: 4px 0 0 0; border-radius: 8px; font-size: 13px; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-primary);">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="uni-lessons-container" style="display: flex; flex-direction: column; gap: 14px;"></div>
+
+                <button id="btn-add-uni-lesson" class="btn-primary" style="width: 100%; margin-top: 15px; min-height: 44px; border-radius: 12px; background: rgba(129,140,248,.13); color: var(--color-purple); box-shadow: none;">
+                    <i class="fa-solid fa-plus"></i> Yeni Ders Ekle
+                </button>
+
+                <div class="exam-card" style="margin: 20px 0 0 0; padding: 16px; flex-direction: column; align-items: flex-start; gap: 6px;">
+                    <h3 style="font-size: 14px; color: var(--text-secondary);">Genel Dönem Ortalaması (GANO)</h3>
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-top: 4px;">
+                        <span id="uni-total-result" style="font-size: 28px; font-weight: 800; color: var(--color-purple);">0.00</span>
+                        <span id="uni-status-info" class="countdown-text" style="font-size: 13px; color: var(--text-secondary);">Kredi Yükü: 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- !!! NOT EKRANI !!! -->
+<section id="screen-notes-dashboard" class="app-screen" style="padding: 0; margin: 0; position: relative; height: 100%; width: 100%;">
+
+    <div id="home-dashboard-view">
+        <header class="dashboard-header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span class="notes-count-badge" id="notes-counter">0 Not</span>
+            </div>
+        </header>
+        
+        <div id="empty-state-container" class="hidden-element">
+            <div class="empty-icon">📝</div>
+            <p>Henüz not yok. Yeni bir tane oluşturmak için aşağıdaki butona dokunun!</p>
+            
+        </div>
+
+        <div id="notes-grid-container"></div>
+
+        <button style="position: fixed; bottom: 75px; right: 20px; z-index: 9999; width: 56px; height: 56px; border-radius: 50%; background-color: var(--color-purple, #818cf8); color: #ffffff; border: none; font-size: 28px; font-weight: bold; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); cursor: pointer; transition: transform 0.2s ease, background-color 0.2s ease;" id="fab-create-note" title="Yeni Not Oluştur">+</button>
+    </div>
+
+    <div id="note-editor-view" class="hidden-element" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999; background: var(--bg-main);">
+        
+        <div id="editor-header-actions">
+            <button class="header-action-btn" id="btn-back-to-home"><i class="fa-solid fa-chevron-left"></i> Geri</button>
+            <div id="editor-current-title">Yeni Not</div>
+            <div style="display: flex; align-items: center; gap: 14px;">
+              
+                <button class="header-action-btn primary-save-trigger" id="btn-save-note">Kaydet</button>
+            </div>
+        </div>
+
+        <div id="note-container" class="paper-blank theme-cream">
+            <div id="paper-pattern-overlay"></div>
+            <div id="scroll-content">
+                <div id="text-editor" contenteditable="true" placeholder="Yazmaya başlamak için herhangi bir yere dokunun..."></div>
+                <canvas id="drawing-canvas"></canvas>
+                <div id="object-layer"></div>
+            </div>
+        </div>
+
+        <input type="file" id="image-loader" accept="image/*" style="display: none;">
+
+        <div id="mobile-toolbar-wrapper">
+            <div id="scroll-hint-pill" class="scroll-hint-visible">Kaydır ➔</div>
+
+            <div class="toolbar-contextual-row scrollable-toolbar-row" id="text-formatting-bar">
+                <div class="custom-dropdown-upward" id="dropdown-font-size">
+                    <div class="dropdown-trigger-btn" id="fs-trigger">14px</div>
+                    <div class="dropdown-menu-panel" id="dropdown-font-size-panel">
+                        <div class="dropdown-item" data-value="2">10px</div>
+                        <div class="dropdown-item" data-value="3">12px</div>
+                        <div class="dropdown-item data-selected" data-value="4">14px</div>
+                        <div class="dropdown-item" data-value="5">16px</div>
+                        <div class="dropdown-item" data-value="6">18px</div>
+                        <div class="dropdown-item" data-value="7">20px</div>
+                        <div class="dropdown-item" data-value="8">24px</div>
+                        <div class="dropdown-item" data-value="9">28px</div>
+                        <div class="dropdown-item" data-value="10">32px</div>
+                    </div>
+                </div>
+                
+                <div class="color-picker-wrapper">
+                    <input type="color" id="text-color-picker" value="#111111">
+                </div>
+
+                <button class="tool-btn" id="btn-bold" data-command="bold"><b>K</b></button>
+                <button class="tool-btn" id="btn-italic" data-command="italic"><i>T</i></button>
+                <button class="tool-btn" id="btn-underline" data-command="underline"><u>A</u></button>
+                <button class="tool-btn" id="btn-strike" data-command="strikeThrough"><s>Ü</s></button>
+                <button class="tool-btn" id="btn-list-bullet" data-command="insertUnorderedList">• Liste</button>
+                <button class="tool-btn" id="btn-list-ordered" data-command="insertOrderedList">1. Liste</button>
+                <button class="tool-btn" id="btn-align-left" data-command="justifyLeft">⬅</button>
+                <button class="tool-btn" id="btn-align-center" data-command="justifyCenter">⬌</button>
+                <button class="tool-btn" id="btn-align-right" data-command="justifyRight">➡</button>
+            </div>
+
+            <div class="toolbar-contextual-row scrollable-toolbar-row" id="drawing-settings-bar" style="display: none;">
+                <span class="slider-label">Kalınlık:</span>
+                <input type="range" id="pen-weight" min="2" max="30" value="5" class="toolbar-slider">
+                
+                <div class="color-picker-wrapper">
+                    <input type="color" id="pen-color-picker" value="#0052cc">
+                </div>
+                
+                <button class="tool-btn toggle-active" id="btn-draw-pen">Kalem</button>
+                <button class="tool-btn" id="btn-draw-eraser">🧽 Silgi</button>
+                <button class="tool-btn" id="btn-draw-clear">🗑️ Temizle</button>
+            </div>
+
+            <div class="toolbar-contextual-row scrollable-toolbar-row" id="page-settings-bar" style="display: none;">
+                <div class="custom-dropdown-upward" id="dropdown-paper-style">
+                    <div class="dropdown-trigger-btn" id="ps-trigger">Düz</div>
+                    <div class="dropdown-menu-panel" id="dropdown-paper-style-panel">
+                        <div class="dropdown-item data-selected" data-value="blank">Düz</div>
+                        <div class="dropdown-item" data-value="lines">Çizgili</div>
+                        <div class="dropdown-item" data-value="grid">Kareli</div>
+                        <div class="dropdown-item" data-value="dots">Noktalı</div>
+                    </div>
+                </div>
+                <div class="custom-dropdown-upward" id="dropdown-paper-color">
+                    <div class="dropdown-trigger-btn" id="pc-trigger">Sıcak Krem</div>
+                    <div class="dropdown-menu-panel" id="dropdown-paper-color-panel">
+                        <div class="dropdown-item data-selected" data-value="cream">Sıcak Krem</div>
+                        <div class="dropdown-item" data-value="beige">Sıcak Bej</div>
+                        <div class="dropdown-item" data-value="gray">Açık Gri</div>
+                        <div class="dropdown-item" data-value="blue">Mat Mavi</div>
+                        <div class="dropdown-item" data-value="green">Adaçayı Yeşili</div>
+                        <div class="dropdown-item" data-value="lavender">Lavanta</div>
+                        <div class="dropdown-item" data-value="pink">Pudra Pembe</div>
+                        <div class="dropdown-item" data-value="brown">Açık Kahve</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toolbar-primary-row scrollable-toolbar-row">
+                <button class="mode-btn active-mode" id="mode-text">📝 Metin</button>
+                <button class="mode-btn" id="mode-draw">🎨 Çizim</button>
+                <button class="mode-btn" id="btn-insert-image">🖼️ +Görsel</button>
+                <button class="mode-btn" id="mode-page">📄 Sayfa</button>
+                <div class="toolbar-divider"></div>
+                <button class="action-btn" id="btn-undo" title="Geri Al">↩</button>
+                <button class="action-btn" id="btn-redo" title="İleri Al">↪</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="custom-dialog-overlay" class="hidden-element">
+        <div class="native-dialog-box">
+            <h3 id="dialog-box-title">İşlemi Onayla</h3>
+            <p id="dialog-box-message">Devam etmek istediğinize emin misiniz?</p>
+            <div id="dialog-input-wrapper" class="hidden-element">
+                <input type="text" id="dialog-text-input" placeholder="Metni buraya girin...">
+            </div>
+            <div class="dialog-actions-row">
+                <button id="dialog-btn-cancel" class="dialog-ui-btn">İptal</button>
+                <button id="dialog-btn-confirm" class="dialog-ui-btn confirmation-accent">Onayla</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- !!! NOT EKRANI BİTİŞİNDEN HEMEN SONRA, BODY KAPANIŞINDAN ÖNCE EKLEYİN !!! -->
+<nav class="android-nav-bar">
+    <a href="index.html" class="nav-item ">
+        <i class="fa-solid fa-house"></i>
+        <span>Ana Sayfa</span>
+    </a>
+    <a href="araclar.html" class="nav-item active">
+        <i class="fa-solid fa-toolbox"></i>
+        <span>Araçlar</span>
+    </a>
+    <a href="profil.html" class="nav-item">
+            <i class="fa-solid fa-user"></i>
+            <span>Profil</span>
+        </a>
+</nav>
+
+
+
+
+<div id="toast-container" class="toast-container"></div>
+<audio id="pomodoro-alarm" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAAAA" preload="auto"></audio>
+
+<script src="script/araclar.js"></script>
+<script src="script/noteditorscript.js"></script>
+<script src="script/pomodrosayfa.js"></script>
+<script src="script/sinavtarihi.js"></script>
+<script src="script/ortalamahesapla.js"></script>
+<script src="script/planlarim.js"></script>
+
+<!-- Kilitli Yükleme Ekranı Modalı -->
+<div id="lock-loader-screen" class="lock-loader-overlay hidden">
+    <div class="lock-loader-content">
+        <div class="lock-icon-wrapper">
+            <i class="fa-solid fa-lock-open" id="anim-lock-icon"></i>
+        </div>
+        <h2 class="lock-loader-title">Günlüğünüz Şifreleniyor...</h2>
+        <p class="lock-loader-text">Düşünceleriniz tamamen şifreli, rahatlıkla kullanabilirsiniz.</p>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="lock-progress"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

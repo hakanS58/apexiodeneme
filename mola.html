@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0b1018">
+
+    <title>Apexio - Mola</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style/mola.css">
+</head>
+
+<body>
+
+<div class="background-effects">
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+</div>
+
+<!-- =========================================================
+     SÜRE SEÇİM POPUP
+========================================================= -->
+
+<div class="popup active" id="breakPopup">
+
+    <div class="popup-box">
+
+        <div class="popup-icon">
+            <i class="fa-solid fa-mug-hot"></i>
+        </div>
+
+        <h2>Mola zamanı</h2>
+
+        <p>
+            Kendine ne kadar zaman ayırmak istiyorsun?
+        </p>
+
+        <div class="time-grid">
+
+            <button class="time-option" data-minutes="5">
+                <span>5</span>
+                <small>dakika</small>
+            </button>
+
+            <button class="time-option" data-minutes="10">
+                <span>10</span>
+                <small>dakika</small>
+            </button>
+
+            <button class="time-option" data-minutes="15">
+                <span>15</span>
+                <small>dakika</small>
+            </button>
+
+            <button class="time-option" data-minutes="20">
+                <span>20</span>
+                <small>dakika</small>
+            </button>
+
+            <button class="time-option" data-minutes="25">
+                <span>25</span>
+                <small>dakika</small>
+            </button>
+
+            <button class="time-option" data-minutes="30">
+                <span>30</span>
+                <small>dakika</small>
+            </button>
+
+            <button class="time-option custom-option" id="customBtn">
+                <i class="fa-solid fa-sliders"></i>
+                <small>Özel</small>
+            </button>
+
+        </div>
+
+        <div class="custom-area" id="customArea">
+
+            <div class="custom-input-wrapper">
+                <input
+                    type="number"
+                    id="customInput"
+                    min="1"
+                    max="60"
+                    inputmode="numeric"
+                    placeholder="1 - 60"
+                >
+
+                <span>dk</span>
+            </div>
+
+            <button id="customStart">
+                Molayı Başlat
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <div class="custom-error" id="customError"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     ANA MOLA SAYFASI
+========================================================= -->
+
+<main class="main-page" id="mainPage">
+
+    <header class="main-header">
+
+        <div class="title-area">
+
+            <div class="main-icon">
+                <i class="fa-solid fa-mug-hot"></i>
+            </div>
+
+            <div>
+                <h1>Mola Alanı</h1>
+                <p>Kendine küçük bir nefes alanı oluştur.</p>
+            </div>
+
+        </div>
+
+        <button class="close-page-btn" id="exitBtn" aria-label="Moladan çık">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+    </header>
+
+
+    <!-- BİLGİLENDİRME -->
+
+    <section class="info-card">
+
+        <div class="info-icon">
+            <i class="fa-solid fa-leaf"></i>
+        </div>
+
+        <div class="info-content">
+
+            <h3>Verimli çalışmanın sırrı</h3>
+
+            <p>
+                Molalar verimli çalışmanın vazgeçilmezidir.
+                Mola süren bittiğinde otomatik olarak ders ekranına döneceksin,
+                merak etme.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- TIMER -->
+
+    <section class="timer-card">
+
+        <div class="timer-decoration timer-decoration-one"></div>
+        <div class="timer-decoration timer-decoration-two"></div>
+
+        <div class="hourglass-container">
+
+            <div class="hourglass">
+                <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+
+        </div>
+
+        <div class="timer" id="timer">
+            00:00
+        </div>
+
+        <div class="timer-label">
+            Kalan mola süresi
+        </div>
+
+        <div class="timer-progress">
+            <div class="timer-progress-bar" id="timerProgress"></div>
+        </div>
+
+    </section>
+
+
+    <!-- AKSİYONLAR -->
+
+    <section class="action-grid">
+
+        <button class="action-card" id="musicOpen">
+
+            <div class="action-icon music-icon">
+                <i class="fa-solid fa-music"></i>
+            </div>
+
+            <div class="action-text">
+                <h3>Rahatlatan Fon Müzikleri</h3>
+                <p>Yağmur, piyano, orman ve daha fazlası.</p>
+            </div>
+
+            <i class="fa-solid fa-chevron-right action-arrow"></i>
+
+        </button>
+
+
+        <button class="action-card" id="gameOpen">
+
+            <div class="action-icon game-icon">
+                <i class="fa-solid fa-gamepad"></i>
+            </div>
+
+            <div class="action-text">
+                <h3>Mini Oyunlar</h3>
+                <p>Kısa bir oyunla zihnini dinlendir.</p>
+            </div>
+
+            <i class="fa-solid fa-chevron-right action-arrow"></i>
+
+        </button>
+
+    </section>
+
+</main>
+
+
+<!-- =========================================================
+     FON MÜZİKLERİ SAYFASI
+========================================================= -->
+
+<section class="subpage" id="musicPage">
+
+    <div class="subpage-header">
+
+        <button class="back-button" id="musicBack">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+
+        <div>
+            <h2>Fon Müzikleri</h2>
+            <p>Molanı daha huzurlu hale getir.</p>
+        </div>
+
+    </div>
+
+
+    <div class="music-headphone-notice">
+        <div class="music-headphone-icon">
+            <i class="fa-solid fa-headphones"></i>
+        </div>
+        <div>
+            <strong>Kulaklık ile dinlemen önerilir</strong>
+            <span>Daha iyi bir mola deneyimi için kulaklık kullanabilirsin.</span>
+        </div>
+    </div>
+
+
+    <div class="music-now-playing" id="musicNowPlaying">
+
+        <div class="music-disc" id="musicDisc">
+            <i class="fa-solid fa-music"></i>
+        </div>
+
+        <div class="music-player-main">
+            <span>Şu an çalıyor</span>
+            <strong id="nowPlayingName">Müzik seçilmedi</strong>
+
+            <div class="music-progress-row">
+                <span id="musicCurrentTime">00:00</span>
+                <input
+                    id="musicSeek"
+                    class="music-seek"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    step="0.1"
+                    aria-label="Müzik ilerlemesi">
+                <span id="musicDuration">00:00</span>
+            </div>
+        </div>
+
+        <button id="musicPlayPause" class="music-control" aria-label="Oynat/Duraklat">
+            <i class="fa-solid fa-play"></i>
+        </button>
+
+        <button id="stopMusic" class="music-stop" aria-label="Müziği durdur">
+            <i class="fa-solid fa-stop"></i>
+        </button>
+
+    </div>
+
+
+    <div class="ataturk-message" id="ataturkMessage" hidden aria-live="polite">
+        <div class="ataturk-message-header">
+            <div class="ataturk-symbol">
+                <i class="fa-solid fa-star"></i>
+            </div>
+            <div>
+                <span>Mustafa Kemal Atatürk</span>
+                <strong>Gençliğe bırakılan mesaj</strong>
+            </div>
+            <button id="closeAtaturkMessage" class="ataturk-close" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="ataturk-message-body">
+            <div class="ataturk-quote-wrap" id="ataturkQuoteWrap">
+                <p class="ataturk-quote" id="ataturkQuote"></p>
+            </div>
+            <span class="ataturk-quote-counter" id="ataturkQuoteCounter">1 / 6</span>
+            <p class="ataturk-message-note">
+                Müzik devam ederken sözler belirli aralıklarla değişir.
+            </p>
+        </div>
+    </div>
+
+
+    <div class="music-list">
+
+        <button class="music-item" data-src="sesler/rahatfon/yagmur.mp3">
+
+            <div class="music-item-icon rain">
+                <i class="fa-solid fa-cloud-rain"></i>
+            </div>
+
+            <div>
+                <strong>Yağmur</strong>
+                <span>Huzurlu yağmur sesi</span>
+            </div>
+
+            <i class="fa-solid fa-play music-play"></i>
+
+        </button>
+
+
+        <button class="music-item" data-src="sesler/rahatfon/piyanoyagmur.mp3">
+
+            <div class="music-item-icon forest">
+                <i class="fa-solid fa-tree"></i>
+            </div>
+
+            <div>
+                <strong>Piyano ve yağmur</strong>
+                <span>Sanatın doğa ile buluştuğu an</span>
+            </div>
+
+            <i class="fa-solid fa-play music-play"></i>
+
+        </button>
+
+
+        <button class="music-item" data-src="sesler/rahatfon/rahatlatici.mp3">
+
+            <div class="music-item-icon ocean">
+                <i class="fa-solid fa-water"></i>
+            </div>
+
+            <div>
+                <strong>Rahatlama seansı</strong>
+                <span>Rahatlatıcı melodiler</span>
+            </div>
+
+            <i class="fa-solid fa-play music-play"></i>
+
+        </button>
+
+
+
+        <button class="music-item ataturk-music-item" data-src="sesler/rahatfon/cokertme.mp3" data-ataturk="true">
+
+            <div class="music-item-icon ataturk">
+                <i class="fa-solid fa-star-and-crescent"></i>
+            </div>
+
+            <div>
+                <strong>Çökertme</strong>
+                <span>Atatürk'e ithaf edilen özel eser</span>
+            </div>
+
+            <i class="fa-solid fa-play music-play"></i>
+
+        </button>
+
+    </div>
+
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     MİNİ OYUNLAR MENÜSÜ
+========================================================= -->
+
+<section class="subpage" id="gamePage">
+
+    <div class="subpage-header">
+
+        <button class="back-button" id="gameBack">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+
+        <div>
+            <h2>Mini Oyunlar</h2>
+            <p>Kısa bir mola, küçük bir eğlence.</p>
+        </div>
+
+    </div>
+
+
+    <!-- OYUN BUTONLARI -->
+
+    <div class="games-list">
+
+        <button class="game-menu-card" id="balloonGameOpen">
+
+            <div class="game-preview balloon-preview">
+                <span class="preview-balloon preview-balloon-one"></span>
+                <span class="preview-balloon preview-balloon-two"></span>
+                <span class="preview-balloon preview-balloon-three"></span>
+            </div>
+
+            <div class="game-menu-content">
+                <div class="game-title-row">
+                    <h3>Balon Patlatma</h3>
+                    <span class="game-tag">30 SN</span>
+                </div>
+
+                <p>
+                    Balonları patlat, skorunu yükselt ve coin kazan.
+                </p>
+            </div>
+
+            <i class="fa-solid fa-chevron-right"></i>
+
+        </button>
+
+
+        <button class="game-menu-card" id="memoryGameOpen">
+
+            <div class="game-preview memory-preview">
+
+                <span><i class="fa-solid fa-star"></i></span>
+                <span><i class="fa-solid fa-heart"></i></span>
+                <span><i class="fa-solid fa-bolt"></i></span>
+                <span><i class="fa-solid fa-moon"></i></span>
+
+            </div>
+
+            <div class="game-menu-content">
+
+                <div class="game-title-row">
+                    <h3>Hafıza Kartları</h3>
+                    <span class="game-tag">HAFIZA</span>
+                </div>
+
+                <p>
+                    Aynı simgeleri bul ve hafızanı test et.
+                </p>
+
+            </div>
+
+            <i class="fa-solid fa-chevron-right"></i>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     OYUN YÜKLEME EKRANI
+========================================================= -->
+
+<div class="game-loading" id="gameLoading">
+
+    <div class="loading-animation">
+
+        <div class="loading-spinner"></div>
+
+        <div class="loading-icon" id="loadingIcon">
+            <i class="fa-solid fa-gamepad"></i>
+        </div>
+
+    </div>
+
+    <h2 id="loadingTitle">Oyun hazırlanıyor</h2>
+
+    <p id="loadingText">
+        Birkaç saniye...
+    </p>
+
+</div>
+
+
+<!-- =========================================================
+     BALON OYUNU MENÜSÜ
+========================================================= -->
+
+<section class="game-screen balloon-menu-screen" id="balloonMenu">
+
+    <div class="game-screen-header">
+
+        <button class="game-back-button" id="balloonMenuBack">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+
+        <div>
+            <h2>Balon Patlatma</h2>
+            <span>Oyuna başlamadan önce seçimlerini yap.</span>
+        </div>
+
+        <div class="game-score">
+            <small>EN YÜKSEK</small>
+            <strong id="balloonMenuHighScore">0</strong>
+        </div>
+
+    </div>
+
+    <div class="balloon-menu-hero">
+
+        <div class="balloon-menu-icon">
+            <i class="fa-solid fa-circle"></i>
+        </div>
+
+        <h3>Balon Patlatma</h3>
+
+        <p>
+            30 saniye içinde olabildiğince çok balon patlat.
+            Skorun kadar coin kazan.
+        </p>
+
+    </div>
+
+    <div class="game-stats balloon-menu-stats">
+
+        <div class="game-stat">
+            <div class="game-stat-icon trophy-icon">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <div>
+                <span>En yüksek skor</span>
+                <strong id="balloonMenuScore">0</strong>
+            </div>
+        </div>
+
+        <div class="game-stat">
+            <div class="game-stat-icon coin-icon">
+                <i class="fa-solid fa-coins"></i>
+            </div>
+            <div>
+                <span>Coin</span>
+                <strong id="balloonMenuCoins">0</strong>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="balloon-menu-actions">
+
+        <button class="balloon-start-button" id="balloonStartButton">
+            <span>
+                <i class="fa-solid fa-play"></i>
+                Oyunu Başlat
+            </span>
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+        <button class="balloon-market-button" id="balloonMarketOpen">
+            <span>
+                <i class="fa-solid fa-store"></i>
+                Balon Marketi
+            </span>
+            <span class="balloon-market-coin">
+                <i class="fa-solid fa-coins"></i>
+                <strong id="balloonMenuMarketCoins">0</strong>
+            </span>
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     BALON OYUNU
+========================================================= -->
+
+<section class="game-screen" id="balloonGame">
+
+    <div class="game-screen-header">
+
+        <button class="game-back-button" id="balloonBack">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+
+        <div>
+            <h2>Balon Patlatma</h2>
+            <span>30 saniyede olabildiğince çok!</span>
+        </div>
+
+        <div class="game-score">
+            <small>SKOR</small>
+            <strong id="balloonScore">0</strong>
+        </div>
+
+    </div>
+
+
+    <div class="balloon-game-info">
+
+        <div>
+            <i class="fa-solid fa-clock"></i>
+            <span id="balloonTimer">30</span>
+        </div>
+
+        <div>
+            <i class="fa-solid fa-coins"></i>
+            <span id="balloonCoins">0</span>
+        </div>
+
+        <div>
+            <i class="fa-solid fa-trophy"></i>
+            <span id="balloonBest">0</span>
+        </div>
+
+    </div>
+
+
+    <div class="balloon-arena" id="balloonArena"></div>
+
+
+    <div class="balloon-game-bottom">
+
+        <span>
+            Balonlara dokun ve patlat!
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     BALON OYUNU SONUÇ
+========================================================= -->
+
+<div class="result-overlay" id="balloonResult">
+
+    <div class="result-box">
+
+        <div class="result-icon">
+            <i class="fa-solid fa-trophy"></i>
+        </div>
+
+        <span class="result-small">OYUN BİTTİ</span>
+
+        <h2>Harika!</h2>
+
+        <div class="result-score">
+            <span>Skorun</span>
+            <strong id="resultScore">0</strong>
+        </div>
+
+        <div class="result-rewards">
+
+            <div>
+                <i class="fa-solid fa-coins"></i>
+                <span id="resultCoins">+0 Coin</span>
+            </div>
+
+            <div>
+                <i class="fa-solid fa-trophy"></i>
+                <span id="resultBest">En yüksek: 0</span>
+            </div>
+
+        </div>
+
+        <button id="playAgain">
+            Tekrar Oyna
+            <i class="fa-solid fa-rotate-right"></i>
+        </button>
+
+        <button class="result-secondary" id="resultBack">
+            Oyunlara Dön
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     BALON MARKETİ
+========================================================= -->
+
+<section class="game-screen" id="balloonMarket">
+
+    <div class="game-screen-header">
+
+        <button class="game-back-button" id="marketBack">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+
+        <div>
+            <h2>Balon Marketi</h2>
+            <span>Coinlerini kullan</span>
+        </div>
+
+        <div class="market-coins">
+            <i class="fa-solid fa-coins"></i>
+            <span id="marketCoins">0</span>
+        </div>
+
+    </div>
+
+
+    <div class="shop-balloons" id="shopBalloons"></div>
+
+</section>
+
+
+<!-- =========================================================
+     HAFIZA OYUNU MENÜSÜ
+========================================================= -->
+
+<section class="game-screen memory-menu-screen" id="memoryMenu">
+
+    <div class="game-screen-header">
+
+        <button class="game-back-button" id="memoryMenuBack">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+
+        <div>
+            <h2>Hafıza Kartları</h2>
+            <span>Oyuna başlamadan önce en iyi süreni gör.</span>
+        </div>
+
+        <div class="game-score">
+            <small>EN KISA</small>
+            <strong id="memoryMenuBestTime">--:--</strong>
+        </div>
+
+    </div>
+
+    <div class="memory-menu-hero">
+
+        <div class="memory-menu-icon">
+            <i class="fa-solid fa-brain"></i>
+        </div>
+
+        <h3>Hafıza Kartları</h3>
+
+        <p>
+            Aynı simgeleri eşleştir ve 8 çifti mümkün olan en kısa sürede tamamla.
+        </p>
+
+    </div>
+
+    <div class="game-stats memory-menu-stats">
+
+        <div class="game-stat">
+            <div class="game-stat-icon trophy-icon">
+                <i class="fa-solid fa-stopwatch"></i>
+            </div>
+            <div>
+                <span>En kısa süre</span>
+                <strong id="memoryMenuBestTimeCard">Henüz yok</strong>
+            </div>
+        </div>
+
+        <div class="game-stat">
+            <div class="game-stat-icon coin-icon">
+                <i class="fa-solid fa-bullseye"></i>
+            </div>
+            <div>
+                <span>Hedef</span>
+                <strong>8 Çift</strong>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="balloon-menu-actions memory-menu-actions">
+
+        <button class="balloon-start-button" id="memoryStartButton">
+            <span>
+                <i class="fa-solid fa-play"></i>
+                Oyunu Başlat
+            </span>
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     HAFIZA OYUNU
+========================================================= -->
+
+<section class="game-screen" id="memoryGame">
+
+    <div class="game-screen-header">
+
+        <button class="game-back-button" id="memoryBack">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+
+        <div>
+            <h2>Hafıza Kartları</h2>
+            <span>Aynı simgeleri eşleştir.</span>
+        </div>
+
+        <div class="game-score">
+            <small>HAMLE</small>
+            <strong id="memoryMoves">0</strong>
+        </div>
+
+    </div>
+
+
+    <div class="memory-info">
+
+        <div>
+            <i class="fa-solid fa-layer-group"></i>
+            <span id="memoryPairs">0 / 8</span>
+        </div>
+
+        <div>
+            <i class="fa-solid fa-clock"></i>
+            <span id="memoryTime">00:00</span>
+        </div>
+
+    </div>
+
+
+    <div class="memory-board" id="memoryBoard"></div>
+
+
+    <div class="memory-message" id="memoryMessage">
+        Aynı simgeleri bulmaya çalış!
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     HAFIZA SONUÇ
+========================================================= -->
+
+<div class="result-overlay" id="memoryResult">
+
+    <div class="result-box">
+
+        <div class="result-icon memory-result-icon">
+            <i class="fa-solid fa-brain"></i>
+        </div>
+
+        <span class="result-small">TAMAMLANDI</span>
+
+        <h2>Hafıza Ustası!</h2>
+
+        <p class="memory-result-message" id="memoryResultMessage">Bu oyunu şu sürede tamamladın.</p>
+
+        <div class="memory-result-stats">
+
+            <div>
+                <span>Hamle</span>
+                <strong id="memoryResultMoves">0</strong>
+            </div>
+
+            <div>
+                <span>Süre</span>
+                <strong id="memoryResultTime">00:00</strong>
+            </div>
+
+        </div>
+
+        <button id="memoryAgain">
+            Tekrar Oyna
+            <i class="fa-solid fa-rotate-right"></i>
+        </button>
+
+        <button class="result-secondary" id="memoryResultBack">
+            Oyunlara Dön
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     GENEL BİLDİRİM
+========================================================= -->
+
+<div class="break-notification" id="breakNotification">
+
+    <div class="notification-icon">
+        <i class="fa-solid fa-bell"></i>
+    </div>
+
+    <div class="notification-content">
+
+        <strong id="notificationTitle">
+            Mola hatırlatması
+        </strong>
+
+        <span id="notificationText">
+            Mola süren azalıyor.
+        </span>
+
+    </div>
+
+    <div class="notification-progress"></div>
+
+</div>
+
+
+<!-- BİP SESİ -->
+
+<audio id="notificationSound" preload="auto">
+    <source src="assets/audio/notification.mp3" type="audio/mpeg">
+</audio>
+
+
+<script src="script/mola.js"></script>
+
+</body>
+</html>

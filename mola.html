@@ -257,7 +257,7 @@
         </div>
         <div>
             <strong>Kulaklık ile dinlemen önerilir</strong>
-            <span>Daha iyi bir mola deneyimi için kulaklık kullanabilirsin.</span>
+            <span>Daha iyi bir mola deneyimi için kulaklık kullanabilirsin. <b style="font-weight: bold; color: #007bff">Müzik çalarken dilersen mini oyunlarıda oynayabilirsin.</b></span>
         </div>
     </div>
 
@@ -316,7 +316,7 @@
             <div class="ataturk-quote-wrap" id="ataturkQuoteWrap">
                 <p class="ataturk-quote" id="ataturkQuote"></p>
             </div>
-            <span class="ataturk-quote-counter" id="ataturkQuoteCounter">1 / 6</span>
+            <span class="ataturk-quote-counter" id="ataturkQuoteCounter">1 / 4</span>
             <p class="ataturk-message-note">
                 Müzik devam ederken sözler belirli aralıklarla değişir.
             </p>
@@ -350,7 +350,7 @@
 
             <div>
                 <strong>Piyano ve yağmur</strong>
-                <span>Sanatın doğa ile buluştuğu an</span>
+                <span>Sanatın doğa ile buluşması</span>
             </div>
 
             <i class="fa-solid fa-play music-play"></i>
@@ -366,7 +366,7 @@
 
             <div>
                 <strong>Rahatlama seansı</strong>
-                <span>Rahatlatıcı melodiler</span>
+                <span>Rahatlatan melodiler</span>
             </div>
 
             <i class="fa-solid fa-play music-play"></i>
@@ -474,6 +474,67 @@
 
         </button>
 
+        <button class="game-menu-card" id="reactionGameOpen">
+            <div class="game-preview reaction-preview">
+                <span><i class="fa-solid fa-bolt"></i></span>
+                <span><i class="fa-solid fa-hand-pointer"></i></span>
+                <span><i class="fa-solid fa-bolt"></i></span>
+            </div>
+            <div class="game-menu-content">
+                <div class="game-title-row">
+                    <h3>Refleks Testi</h3>
+                    <span class="game-tag">REFLEKS</span>
+                </div>
+                <p>Renk yeşile döndüğü anda dokun ve refleksini ölç.</p>
+            </div>
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+        <button class="game-menu-card" id="mergeGameOpen">
+            <div class="game-preview merge-preview">
+                <span>2</span><span>4</span><span>8</span><span>16</span>
+            </div>
+            <div class="game-menu-content">
+                <div class="game-title-row">
+                    <h3>Sayı Birleştir</h3>
+                    <span class="game-tag">2048</span>
+                </div>
+                <p>Aynı sayıları birleştir, daha büyük sayılara ulaş ve rekorunu kır.</p>
+            </div>
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+        <button class="game-menu-card" id="puzzleGameOpen">
+            <div class="game-preview puzzle-preview target-preview">
+                <span class="target-dot"></span>
+                <span class="target-dot"></span>
+                <span class="target-dot"></span>
+                <span class="target-cross">+</span>
+            </div>
+            <div class="game-menu-content">
+                <div class="game-title-row">
+                    <h3>Hedef Avı</h3>
+                    <span class="game-tag">REFLEKS</span>
+                </div>
+                <p>Hareket eden hedefleri yakala, süre bitmeden en yüksek skoru yap.</p>
+            </div>
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+
+        <button class="game-menu-card" id="stackGameOpen">
+            <div class="game-preview stack-preview">
+                <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="game-menu-content">
+                <div class="game-title-row">
+                    <h3>Kule Ustası</h3>
+                    <span class="game-tag">BECERİ</span>
+                </div>
+                <p>Hareket eden blokları doğru anda bırak, kuleni olabildiğince yükselt.</p>
+            </div>
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
     </div>
 
 </section>
@@ -732,6 +793,76 @@
 
 
 <!-- =========================================================
+     REFLEKS OYUNU MENÜSÜ
+========================================================= -->
+
+<section class="game-screen reaction-menu-screen" id="reactionMenu">
+    <div class="game-screen-header">
+        <button class="game-back-button" id="reactionMenuBack"><i class="fa-solid fa-arrow-left"></i></button>
+        <div>
+            <h2>Refleks Testi</h2>
+            <span>Yeşili gördüğün anda dokun.</span>
+        </div>
+        <div class="game-score">
+            <small>REKOR</small>
+            <strong id="reactionMenuBest">-- ms</strong>
+        </div>
+    </div>
+
+    <div class="reaction-menu-hero">
+        <div class="reaction-menu-icon"><i class="fa-solid fa-bolt"></i></div>
+        <h3>Ne kadar hızlısın?</h3>
+        <p>Ekran yeşile döndüğünde mümkün olduğunca hızlı dokun. En düşük milisaniye senin rekorun olacak.</p>
+    </div>
+
+    <div class="game-stats reaction-menu-stats">
+        <div class="game-stat">
+            <div class="game-stat-icon trophy-icon"><i class="fa-solid fa-bolt"></i></div>
+            <div><span>En hızlı tepki</span><strong id="reactionMenuBestCard">Henüz yok</strong></div>
+        </div>
+        <div class="game-stat">
+            <div class="game-stat-icon coin-icon"><i class="fa-solid fa-hand-pointer"></i></div>
+            <div><span>Kontrol</span><strong>Tek dokunuş</strong></div>
+        </div>
+    </div>
+
+    <div class="balloon-menu-actions">
+        <button class="balloon-start-button" id="reactionStartButton">
+            <span><i class="fa-solid fa-play"></i> Oyunu Başlat</span>
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+</section>
+
+<section class="game-screen reaction-game-screen" id="reactionGame">
+    <div class="game-screen-header">
+        <button class="game-back-button" id="reactionBack"><i class="fa-solid fa-arrow-left"></i></button>
+        <div><h2>Refleks Testi</h2><span>Bekle ve yeşile dönüşte dokun.</span></div>
+        <div class="game-score"><small>TEPKİ</small><strong id="reactionTime">-- ms</strong></div>
+    </div>
+    <div class="reaction-arena reaction-waiting" id="reactionArena">
+        <div class="reaction-center">
+            <div class="reaction-icon"><i class="fa-solid fa-hand-pointer"></i></div>
+            <h3 id="reactionStatus">Bekle...</h3>
+            <p>Erken dokunursan tur yeniden başlar.</p>
+        </div>
+    </div>
+</section>
+
+<div class="result-overlay" id="reactionResult">
+    <div class="result-box">
+        <div class="result-icon"><i class="fa-solid fa-bolt"></i></div>
+        <span class="result-small">REFLEKS SONUCU</span>
+        <h2>Hızlıydın!</h2>
+        <div class="result-score"><span>Tepki süren</span><strong id="reactionResultTime">-- ms</strong></div>
+        <p id="reactionResultMessage" class="memory-result-message">Refleksini biraz daha geliştirebilirsin.</p>
+        <button id="reactionRetry">Tekrar Dene <i class="fa-solid fa-rotate-right"></i></button>
+        <button class="result-secondary" id="reactionResultBack">Oyunun Menüsüne Dön</button>
+    </div>
+</div>
+
+
+<!-- =========================================================
      HAFIZA OYUNU MENÜSÜ
 ========================================================= -->
 
@@ -745,12 +876,12 @@
 
         <div>
             <h2>Hafıza Kartları</h2>
-            <span>Oyuna başlamadan önce en iyi süreni gör.</span>
+            <span>Oyuna başlamadan önce hamle rekorunu gör.</span>
         </div>
 
         <div class="game-score">
-            <small>EN KISA</small>
-            <strong id="memoryMenuBestTime">--:--</strong>
+            <small>REKOR</small>
+            <strong id="memoryMenuBestMovesTop">--</strong>
         </div>
 
     </div>
@@ -773,11 +904,11 @@
 
         <div class="game-stat">
             <div class="game-stat-icon trophy-icon">
-                <i class="fa-solid fa-stopwatch"></i>
+                <i class="fa-solid fa-trophy"></i>
             </div>
             <div>
-                <span>En kısa süre</span>
-                <strong id="memoryMenuBestTimeCard">Henüz yok</strong>
+                <span>En az hamle</span>
+                <strong id="memoryMenuBestMoves">Henüz yok</strong>
             </div>
         </div>
 
@@ -903,6 +1034,169 @@
 
 </div>
 
+
+<!-- =========================================================
+     SAYI BİRLEŞTİR MENÜSÜ
+========================================================= -->
+<section class="game-screen merge-menu-screen" id="mergeMenu">
+    <div class="game-screen-header">
+        <button class="game-back-button" id="mergeMenuBack"><i class="fa-solid fa-arrow-left"></i></button>
+        <div><h2>Sayı Birleştir</h2><span>2048 tarzı sayı bulmacası.</span></div>
+        <div class="game-score"><small>REKOR</small><strong id="mergeMenuBest">0</strong></div>
+    </div>
+    <div class="merge-menu-hero">
+        <div class="merge-menu-icon"><i class="fa-solid fa-layer-group"></i></div>
+        <h3>Ne kadar büyütebilirsin?</h3>
+        <p>Aynı sayıları kaydırarak birleştir. Tahta dolmadan mümkün olan en yüksek skora ulaş.</p>
+    </div>
+    <div class="game-stats">
+        <div class="game-stat"><div class="game-stat-icon trophy-icon"><i class="fa-solid fa-trophy"></i></div><div><span>En yüksek skor</span><strong id="mergeMenuBestCard">0</strong></div></div>
+        <div class="game-stat"><div class="game-stat-icon coin-icon"><i class="fa-solid fa-bullseye"></i></div><div><span>Hedef</span><strong>2048</strong></div></div>
+    </div>
+    <div class="balloon-menu-actions">
+        <button class="balloon-start-button" id="mergeStartButton"><span><i class="fa-solid fa-play"></i> Oyunu Başlat</span><i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+</section>
+
+<section class="game-screen merge-game-screen" id="mergeGame">
+    <div class="game-screen-header">
+        <button class="game-back-button" id="mergeBack"><i class="fa-solid fa-arrow-left"></i></button>
+        <div><h2>Sayı Birleştir</h2><span>Aynı sayıları birleştir.</span></div>
+        <div class="game-score"><small>SKOR</small><strong id="mergeScore">0</strong></div>
+    </div>
+    <div class="merge-info"><div><i class="fa-solid fa-trophy"></i><span>Rekor: <b id="mergeBest">0</b></span></div><div><i class="fa-solid fa-bolt"></i><span>2048'e ulaş!</span></div></div>
+    <div class="merge-board" id="mergeBoard"></div>
+    <p class="merge-help">Kaydır: yukarı · aşağı · sola · sağa</p>
+</section>
+
+<!-- =========================================================
+     HEDEF AVI MENÜSÜ
+========================================================= -->
+<section class="game-screen puzzle-menu-screen" id="puzzleMenu">
+    <div class="game-screen-header">
+        <button class="game-back-button" id="puzzleMenuBack"><i class="fa-solid fa-arrow-left"></i></button>
+        <div><h2>Hedef Avı</h2><span>Hedefleri yakala.</span></div>
+        <div class="game-score"><small>REKOR</small><strong id="puzzleMenuBest">0</strong></div>
+    </div>
+
+    <div class="puzzle-menu-hero">
+        <div class="puzzle-menu-icon target-menu-icon"><i class="fa-solid fa-crosshairs"></i></div>
+        <h3>Hedefleri kaçırma!</h3>
+        <p>30 saniye içinde ekranda beliren hedeflere dokun. Hedefler küçüldükçe puan almak zorlaşır.</p>
+    </div>
+
+    <div class="game-stats">
+        <div class="game-stat">
+            <div class="game-stat-icon trophy-icon"><i class="fa-solid fa-trophy"></i></div>
+            <div><span>En yüksek skor</span><strong id="puzzleMenuBestCard">Henüz yok</strong></div>
+        </div>
+        <div class="game-stat">
+            <div class="game-stat-icon coin-icon"><i class="fa-solid fa-stopwatch"></i></div>
+            <div><span>Süre</span><strong>30 saniye</strong></div>
+        </div>
+    </div>
+
+    <div class="balloon-menu-actions">
+        <button class="balloon-start-button" id="puzzleStartButton">
+            <span><i class="fa-solid fa-play"></i> Oyunu Başlat</span>
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+</section>
+
+<section class="game-screen puzzle-game-screen" id="puzzleGame">
+    <div class="game-screen-header">
+        <button class="game-back-button" id="puzzleBack"><i class="fa-solid fa-arrow-left"></i></button>
+        <div><h2>Hedef Avı</h2><span>Hedefleri yakala.</span></div>
+        <div class="game-score"><small>SÜRE</small><strong id="puzzleMoves">30</strong></div>
+    </div>
+
+    <div class="puzzle-info">
+        <div><i class="fa-solid fa-bullseye"></i><span>Skor <b id="puzzleMovesInfo">0</b></span></div>
+        <div><i class="fa-solid fa-trophy"></i><span>Rekor <b id="puzzleBestInfo">--</b></span></div>
+    </div>
+
+    <div class="target-game-arena puzzle-board" id="puzzleBoard">
+        <button class="target-game-target" id="puzzleTarget" aria-label="Hedef"></button>
+        <div class="target-game-countdown" id="puzzleMessage">HEDEFİ YAKALA!</div>
+    </div>
+</section>
+
+<div class="result-overlay" id="puzzleResult">
+    <div class="result-box">
+        <div class="result-icon memory-result-icon"><i class="fa-solid fa-crosshairs"></i></div>
+        <span class="result-small">SÜRE BİTTİ</span>
+        <h2>Hedef Avı!</h2>
+        <div class="result-score"><span>Skorun</span><strong id="puzzleResultMoves">0</strong></div>
+        <p class="memory-result-message" id="puzzleResultMessage">Süre doldu.</p>
+        <button id="puzzleAgain">Tekrar Oyna <i class="fa-solid fa-rotate-right"></i></button>
+        <button class="result-secondary" id="puzzleResultBack">Oyunun Menüsüne Dön</button>
+    </div>
+</div>
+
+<!-- =========================================================
+     SAYI BİRLEŞTİR SONUÇ
+========================================================= -->
+<div class="result-overlay" id="mergeResult">
+    <div class="result-box">
+        <div class="result-icon"><i class="fa-solid fa-layer-group"></i></div>
+        <span class="result-small">OYUN BİTTİ</span>
+        <h2>Oyun Bitti!</h2>
+        <div class="result-score"><span>Skorun</span><strong id="mergeResultScore">0</strong></div>
+        <p class="memory-result-message" id="mergeResultMessage">Bu oyunda güzel bir skor yaptın.</p>
+        <button id="mergeAgain">Tekrar Oyna <i class="fa-solid fa-rotate-right"></i></button>
+        <button class="result-secondary" id="mergeResultBack">Oyunun Menüsüne Dön</button>
+    </div>
+</div>
+
+<!-- =========================================================
+     KULE USTASI MENÜSÜ
+========================================================= -->
+<section class="game-screen stack-menu-screen" id="stackMenu">
+    <div class="game-screen-header">
+        <button class="game-back-button" id="stackMenuBack"><i class="fa-solid fa-arrow-left"></i></button>
+        <div><h2>Kule Ustası</h2><span>Blokları üst üste yerleştir.</span></div>
+        <div class="game-score"><small>REKOR</small><strong id="stackMenuBest">0</strong></div>
+    </div>
+    <div class="stack-menu-hero">
+        <div class="stack-menu-icon"><i class="fa-solid fa-layer-group"></i></div>
+        <h3>Kuleni ne kadar yükseltebilirsin?</h3>
+        <p>Hareket eden bloğu doğru anda bırak. Ne kadar iyi hizalarsan kulen o kadar yüksek olur.</p>
+    </div>
+    <div class="game-stats">
+        <div class="game-stat"><div class="game-stat-icon trophy-icon"><i class="fa-solid fa-trophy"></i></div><div><span>En yüksek kule</span><strong id="stackMenuBestCard">0</strong></div></div>
+        <div class="game-stat"><div class="game-stat-icon coin-icon"><i class="fa-solid fa-infinity"></i></div><div><span>Oyun Modu</span><strong>Sınırsız</strong></div></div>
+    </div>
+    <div class="balloon-menu-actions">
+        <button class="balloon-start-button" id="stackStartButton"><span><i class="fa-solid fa-play"></i> Oyunu Başlat</span><i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+</section>
+
+<section class="game-screen stack-game-screen" id="stackGame">
+    <div class="game-screen-header">
+        <button class="game-back-button" id="stackBack"><i class="fa-solid fa-arrow-left"></i></button>
+        <div><h2>Kule Ustası</h2><span>Doğru anda dokun.</span></div>
+        <div class="game-score"><small>KAT</small><strong id="stackScore">0</strong></div>
+    </div>
+    <div class="stack-info"><div><i class="fa-solid fa-trophy"></i><span>Rekor: <b id="stackBest">0</b></span></div><div><i class="fa-solid fa-hand-pointer"></i><span>Dokun = bırak</span></div></div>
+    <div class="stack-arena" id="stackArena">
+        <div class="stack-instruction" id="stackInstruction">Başlamak için dokun</div>
+        <div class="stack-tower" id="stackTower"></div>
+        <div class="stack-moving" id="stackMoving"></div>
+    </div>
+</section>
+
+<div class="result-overlay" id="stackResult">
+    <div class="result-box">
+        <div class="result-icon"><i class="fa-solid fa-trophy"></i></div>
+        <span class="result-small">KULE TAMAMLANDI</span>
+        <h2>Harika!</h2>
+        <div class="result-score"><span>Kulen</span><strong id="stackResultScore">0</strong></div>
+        <p class="memory-result-message" id="stackResultMessage">Katı tamamladın.</p>
+        <button id="stackAgain">Tekrar Oyna <i class="fa-solid fa-rotate-right"></i></button>
+        <button class="result-secondary" id="stackResultBack">Oyunun Menüsüne Dön</button>
+    </div>
+</div>
 
 <!-- =========================================================
      GENEL BİLDİRİM

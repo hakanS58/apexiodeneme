@@ -64,8 +64,86 @@ const loadingIcon = document.getElementById("loadingIcon");
 
 const balloonGameOpen = document.getElementById("balloonGameOpen");
 const memoryGameOpen = document.getElementById("memoryGameOpen");
+const reactionGameOpen = document.getElementById("reactionGameOpen");
+const mergeGameOpen = document.getElementById("mergeGameOpen");
+const puzzleGameOpen = document.getElementById("puzzleGameOpen");
 const balloonStartButton = document.getElementById("balloonStartButton");
 const balloonMarketOpen = document.getElementById("balloonMarketOpen");
+const memoryStartButton = document.getElementById("memoryStartButton");
+const memoryMenu = document.getElementById("memoryMenu");
+const memoryMenuBack = document.getElementById("memoryMenuBack");
+const memoryMenuBestMoves = document.getElementById("memoryMenuBestMoves");
+const memoryMenuBestMovesTop = document.getElementById("memoryMenuBestMovesTop");
+
+const reactionMenu = document.getElementById("reactionMenu");
+const reactionMenuBack = document.getElementById("reactionMenuBack");
+const reactionStartButton = document.getElementById("reactionStartButton");
+const reactionMenuBest = document.getElementById("reactionMenuBest");
+const reactionMenuBestCard = document.getElementById("reactionMenuBestCard");
+const reactionGame = document.getElementById("reactionGame");
+const reactionBack = document.getElementById("reactionBack");
+const reactionArena = document.getElementById("reactionArena");
+const reactionStatus = document.getElementById("reactionStatus");
+const reactionTime = document.getElementById("reactionTime");
+const reactionResultTime = document.getElementById("reactionResultTime");
+const reactionResultMessage = document.getElementById("reactionResultMessage");
+const reactionResult = document.getElementById("reactionResult");
+const reactionRetry = document.getElementById("reactionRetry");
+const reactionResultBack = document.getElementById("reactionResultBack");
+const mergeMenu = document.getElementById("mergeMenu");
+const mergeMenuBack = document.getElementById("mergeMenuBack");
+const mergeStartButton = document.getElementById("mergeStartButton");
+const mergeMenuBest = document.getElementById("mergeMenuBest");
+const mergeMenuBestCard = document.getElementById("mergeMenuBestCard");
+const mergeGame = document.getElementById("mergeGame");
+const mergeBack = document.getElementById("mergeBack");
+const mergeStartBoard = document.getElementById("mergeBoard");
+const mergeScoreElement = document.getElementById("mergeScore");
+const mergeBestElement = document.getElementById("mergeBest");
+
+const puzzleMenu = document.getElementById("puzzleMenu");
+const puzzleMenuBack = document.getElementById("puzzleMenuBack");
+const puzzleStartButton = document.getElementById("puzzleStartButton");
+const puzzleMenuBest = document.getElementById("puzzleMenuBest");
+const puzzleMenuBestCard = document.getElementById("puzzleMenuBestCard");
+const puzzleGame = document.getElementById("puzzleGame");
+const puzzleBack = document.getElementById("puzzleBack");
+const puzzleBoard = document.getElementById("puzzleBoard");
+const puzzleTarget = document.getElementById("puzzleTarget");
+const puzzleMovesElement = document.getElementById("puzzleMoves");
+const puzzleMovesInfo = document.getElementById("puzzleMovesInfo");
+const puzzleBestInfo = document.getElementById("puzzleBestInfo");
+const puzzleMessage = document.getElementById("puzzleMessage");
+const puzzleResult = document.getElementById("puzzleResult");
+const puzzleResultMoves = document.getElementById("puzzleResultMoves");
+const puzzleResultMessage = document.getElementById("puzzleResultMessage");
+const puzzleAgain = document.getElementById("puzzleAgain");
+const puzzleResultBack = document.getElementById("puzzleResultBack");
+const mergeResult = document.getElementById("mergeResult");
+const mergeResultScore = document.getElementById("mergeResultScore");
+const mergeResultMessage = document.getElementById("mergeResultMessage");
+const mergeAgain = document.getElementById("mergeAgain");
+const mergeResultBack = document.getElementById("mergeResultBack");
+
+const stackGameOpen = document.getElementById("stackGameOpen");
+const stackMenu = document.getElementById("stackMenu");
+const stackMenuBack = document.getElementById("stackMenuBack");
+const stackStartButton = document.getElementById("stackStartButton");
+const stackMenuBest = document.getElementById("stackMenuBest");
+const stackMenuBestCard = document.getElementById("stackMenuBestCard");
+const stackGame = document.getElementById("stackGame");
+const stackBack = document.getElementById("stackBack");
+const stackArena = document.getElementById("stackArena");
+const stackTower = document.getElementById("stackTower");
+const stackMoving = document.getElementById("stackMoving");
+const stackScoreElement = document.getElementById("stackScore");
+const stackBestElement = document.getElementById("stackBest");
+const stackInstruction = document.getElementById("stackInstruction");
+const stackResult = document.getElementById("stackResult");
+const stackResultScore = document.getElementById("stackResultScore");
+const stackResultMessage = document.getElementById("stackResultMessage");
+const stackAgain = document.getElementById("stackAgain");
+const stackResultBack = document.getElementById("stackResultBack");
 
 const balloonMenu = document.getElementById("balloonMenu");
 const balloonMenuBack = document.getElementById("balloonMenuBack");
@@ -660,11 +738,9 @@ function resetMusicUI() {
 
 const ataturkQuotes = [
     "Bütün ümidim gençliktedir.",
-    "Ey yükselen yeni nesil, istikbal sizindir. Cumhuriyet'i biz kurduk, onu yükseltecek ve yaşatacak sizsiniz.",
-    "Muhtaç olduğun kudret damarlarındaki asil kanda mevcuttur.",
-    "Küçük hanımlar, küçük beyler! Sizler hepiniz geleceğin bir gülü, yıldızı ve ikbal ışığısınız. Memleketi asıl ışığa boğacak olan sizsiniz.",
+    "Ey yükselen yeni nesil! Gelecek sizindir.",
     "Gençler, cesaretimizi güçlendiren ve sürdüren sizlersiniz.",
-    "Biz her şeyi gençliğe bırakacağız... O gençlik ki hiçbir şeyi unutmayacaktır; geleceğin ışık saçan çiçekleri onlardır."
+    "Gençliği yetiştiriniz. Onlara ilim ve irfanın müspet fikirlerini veriniz."
 ];
 
 let ataturkQuoteIndex = 0;
@@ -854,7 +930,15 @@ const STORAGE = {
 
     ownedBalloons: "apexio_owned_balloons",
 
-    selectedBalloon: "apexio_selected_balloon"
+    selectedBalloon: "apexio_selected_balloon",
+
+    memoryBestMoves: "apexio_memory_best_moves",
+
+    reactionBest: "apexio_reaction_best",
+
+    mergeBest: "apexio_merge_best",
+
+    puzzleBestMoves: "apexio_puzzle_best_moves"
 
 };
 
@@ -950,6 +1034,39 @@ function setSelectedBalloon(id) {
 }
 
 
+function getMemoryBestMoves() {
+    const value = Number(localStorage.getItem(STORAGE.memoryBestMoves) || 0);
+    return value > 0 ? value : null;
+}
+
+function setMemoryBestMoves(value) {
+    localStorage.setItem(STORAGE.memoryBestMoves, String(value));
+}
+
+function getReactionBest() {
+    const value = Number(localStorage.getItem(STORAGE.reactionBest) || 0);
+    return value > 0 ? value : null;
+}
+
+function setReactionBest(value) {
+    localStorage.setItem(STORAGE.reactionBest, String(value));
+}
+
+function getMergeBest() {
+    return Number(localStorage.getItem(STORAGE.mergeBest) || 0);
+}
+function setMergeBest(value) {
+    localStorage.setItem(STORAGE.mergeBest, String(value));
+}
+function getPuzzleBestMoves() {
+    const value = Number(localStorage.getItem(STORAGE.puzzleBestMoves) || 0);
+    return value > 0 ? value : null;
+}
+function setPuzzleBestMoves(value) {
+    localStorage.setItem(STORAGE.puzzleBestMoves, String(value));
+}
+
+
 /* =========================================================
    BALON TÜRLERİ
 ========================================================= */
@@ -1024,6 +1141,33 @@ function updateGameMenu() {
     marketCoins.textContent = coins;
     balloonCoinsElement.textContent = coins;
     balloonBestElement.textContent = highScore;
+
+    const bestMoves = getMemoryBestMoves();
+    const bestReaction = getReactionBest();
+
+    if (memoryMenuBestMoves) {
+        memoryMenuBestMoves.textContent = bestMoves ? `${bestMoves} Hamle` : "Henüz yok";
+    }
+
+    if (memoryMenuBestMovesTop) {
+        memoryMenuBestMovesTop.textContent = bestMoves ? bestMoves : "--";
+    }
+
+    if (reactionMenuBest) {
+        reactionMenuBest.textContent = bestReaction ? `${bestReaction} ms` : "-- ms";
+    }
+
+    if (reactionMenuBestCard) {
+        reactionMenuBestCard.textContent = bestReaction ? `${bestReaction} ms` : "Henüz yok";
+    }
+
+    const bestMerge = getMergeBest();
+    if (mergeMenuBest) mergeMenuBest.textContent = bestMerge;
+    if (mergeMenuBestCard) mergeMenuBestCard.textContent = bestMerge;
+
+    const bestPuzzle = getPuzzleBestMoves();
+    if (puzzleMenuBest) puzzleMenuBest.textContent = bestPuzzle ? bestPuzzle : "0";
+    if (puzzleMenuBestCard) puzzleMenuBestCard.textContent = bestPuzzle ? `${bestPuzzle} Puan` : "Henüz yok";
 
 }
 
@@ -1119,6 +1263,8 @@ let balloonGameInterval = null;
 let balloonSpawnInterval = null;
 
 let balloonGameRunning = false;
+let balloonAnimationFrame = null;
+let balloonGameStartedAt = 0;
 
 
 /* =========================================================
@@ -1134,6 +1280,8 @@ function startBalloonGame() {
     balloonGameSeconds = 30;
 
     balloonGameRunning = true;
+    balloonGameStartedAt = performance.now();
+    updateBalloonMotion.lastTime = 0;
 
     balloonScoreElement.textContent = "0";
 
@@ -1149,7 +1297,7 @@ function startBalloonGame() {
         İlk balonları üret.
     */
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
 
         setTimeout(() => {
 
@@ -1157,7 +1305,7 @@ function startBalloonGame() {
                 spawnBalloon();
             }
 
-        }, i * 250);
+        }, i * 170);
 
     }
 
@@ -1173,8 +1321,10 @@ function startBalloonGame() {
                 spawnBalloon();
             }
 
-        }, 850);
+        }, 350);
 
+
+    balloonAnimationFrame = requestAnimationFrame(updateBalloonMotion);
 
     /*
         Oyun süresi.
@@ -1209,129 +1359,95 @@ function startBalloonGame() {
 
 function spawnBalloon() {
 
-    if (!balloonGameRunning) {
-        return;
+    if (!balloonGameRunning) return;
+
+    const isBomb = Math.random() < 0.20;
+    const item = document.createElement("div");
+
+    item.className = isBomb ? "balloon bomb" : "balloon";
+    item.dataset.type = isBomb ? "bomb" : "balloon";
+    item.dataset.popped = "0";
+
+    const arenaWidth = balloonArena.clientWidth;
+    const size = isBomb ? 52 : 50;
+    const maxX = Math.max(5, arenaWidth - size - 5);
+
+    item.style.left = Math.floor(Math.random() * maxX) + "px";
+    item.style.bottom = "-90px";
+
+    item.dataset.y = "-90";
+    item.dataset.spawnedAt = String(performance.now());
+
+    if (isBomb) {
+        item.innerHTML = `<span class="bomb-icon"><i class="fa-solid fa-bomb"></i></span>`;
+    } else {
+        const selectedId = getSelectedBalloon();
+        const selected = balloonTypes.find(x => x.id === selectedId) || balloonTypes[0];
+        item.style.background = selected.color;
+        item.style.setProperty("--balloon-scale", 0.78 + Math.random() * 0.45);
+
+        const string = document.createElement("span");
+        string.className = "balloon-string";
+        item.appendChild(string);
     }
 
-    const balloon =
-        document.createElement("div");
-
-    balloon.className = "balloon";
-
-    const selectedId =
-        getSelectedBalloon();
-
-    const selected =
-        balloonTypes.find(
-            item => item.id === selectedId
-        ) || balloonTypes[0];
-
-    balloon.style.background =
-        selected.color;
-
-
-    /*
-        Arena boyutuna göre pozisyon.
-    */
-
-    const arenaWidth =
-        balloonArena.clientWidth;
-
-    const arenaHeight =
-        balloonArena.clientHeight;
-
-    const size = 50;
-
-    const maxX =
-        Math.max(5, arenaWidth - size - 5);
-
-    const maxY =
-        Math.max(5, arenaHeight - 80);
-
-    balloon.style.left =
-        Math.floor(
-            Math.random() * maxX
-        ) + "px";
-
-    balloon.style.top =
-        Math.floor(
-            Math.random() * maxY
-        ) + "px";
-
-
-    /*
-        Biraz farklı boyut.
-    */
-
-    const scale =
-        0.75 + Math.random() * 0.55;
-
-    balloon.style.transform =
-        `scale(${scale})`;
-
-
-    const string =
-        document.createElement("span");
-
-    string.className = "balloon-string";
-
-    balloon.appendChild(string);
-
-
-    balloon.addEventListener("pointerdown", event => {
-
+    item.addEventListener("pointerdown", event => {
         event.preventDefault();
 
-        if (!balloonGameRunning) {
-            return;
+        if (!balloonGameRunning || item.dataset.popped === "1") return;
+
+        item.dataset.popped = "1";
+
+        if (isBomb) {
+            balloonScore = Math.max(0, balloonScore - 1);
+            item.classList.add("bomb-hit");
+        } else {
+            balloonScore++;
+            item.classList.add("pop");
         }
 
-        if (balloon.dataset.popped === "1") {
-            return;
-        }
+        balloonScoreElement.textContent = balloonScore;
 
-        balloon.dataset.popped = "1";
+        setTimeout(() => item.remove(), 180);
+    }, { passive: false });
 
-        balloonScore++;
+    balloonArena.appendChild(item);
 
-        balloonScoreElement.textContent =
-            balloonScore;
-
-        balloon.classList.add("pop");
-
-        setTimeout(() => {
-
-            balloon.remove();
-
-        }, 180);
-
-    }, {
-        passive: false
-    });
-
-
-    balloonArena.appendChild(balloon);
-
-
-    /*
-        Çok uzun süre dokunulmazsa balonu kaldır.
-    */
-
+    // Bombalar dokunulmazsa 5 saniyede kaybolur.
     setTimeout(() => {
-
-        if (
-            balloon.isConnected &&
-            balloon.dataset.popped !== "1"
-        ) {
-
-            balloon.remove();
-
-        }
-
-    }, 5000);
+        if (item.isConnected && item.dataset.popped !== "1") item.remove();
+    }, isBomb ? 5000 : 15000);
 
 }
 
+function getBalloonRiseSpeed() {
+    const elapsed = Math.max(0, (performance.now() - balloonGameStartedAt) / 1000);
+
+    // İlk 5 saniye mevcut başlangıç hızı korunur.
+    // Sonrasında hız süre azaldıkça belirgin şekilde artar.
+    if (elapsed <= 5) return 155;
+
+    const t = Math.min(1, (elapsed - 5) / 25);
+    // Yumuşak ama güçlü hızlanma: 155 -> yaklaşık 430 px/sn.
+    return 155 + (t * t * 275);
+}
+
+function updateBalloonMotion(timestamp) {
+    if (!balloonGameRunning) return;
+    const delta = Math.min(0.04, ((updateBalloonMotion.lastTime || timestamp) ? (timestamp - (updateBalloonMotion.lastTime || timestamp)) / 1000 : 0));
+    updateBalloonMotion.lastTime = timestamp;
+    const speed = getBalloonRiseSpeed();
+    const arenaHeight = balloonArena.clientHeight;
+    balloonArena.querySelectorAll('.balloon').forEach(item => {
+        if (item.dataset.popped === '1') return;
+        let y = Number(item.dataset.y || -90);
+        y += speed * delta;
+        item.dataset.y = String(y);
+        item.style.bottom = `${y}px`;
+        if (y > arenaHeight + 80) item.remove();
+    });
+    balloonAnimationFrame = requestAnimationFrame(updateBalloonMotion);
+}
 
 /* =========================================================
    BALON OYUNU BİTİR
@@ -1412,6 +1528,12 @@ function stopBalloonGame() {
     balloonGameInterval = null;
 
     balloonSpawnInterval = null;
+
+    if (balloonAnimationFrame) {
+        cancelAnimationFrame(balloonAnimationFrame);
+        balloonAnimationFrame = null;
+    }
+    updateBalloonMotion.lastTime = 0;
 
 }
 
@@ -1698,21 +1820,27 @@ memoryGameOpen.addEventListener("click", () => {
 
     openGameWithLoading(
         "Hafıza hazırlanıyor",
-        "Kartlar karıştırılıyor...",
+        "Hafıza menüsü açılıyor...",
         "fa-solid fa-brain",
         () => {
-
             gamePage.classList.remove("show");
-
-            memoryGame.classList.add("show");
-
-            startMemoryGame();
-
+            updateGameMenu();
+            memoryMenu.classList.add("show");
         }
     );
 
 });
 
+memoryStartButton.addEventListener("click", () => {
+    memoryMenu.classList.remove("show");
+    memoryGame.classList.add("show");
+    startMemoryGame();
+});
+
+memoryMenuBack.addEventListener("click", () => {
+    memoryMenu.classList.remove("show");
+    gamePage.classList.add("show");
+});
 
 /* =========================================================
    HAFIZA VERİLERİ
@@ -2028,12 +2156,22 @@ function finishMemoryGame() {
 
     memoryTimerInterval = null;
 
-    memoryResultMoves.textContent =
-        memoryMoves;
+    const oldBestMoves = getMemoryBestMoves();
+    const isNewRecord = !oldBestMoves || memoryMoves < oldBestMoves;
 
-    memoryResultTime.textContent =
-        formatTime(memorySeconds);
+    if (isNewRecord) setMemoryBestMoves(memoryMoves);
 
+    memoryResultMoves.textContent = memoryMoves;
+    memoryResultTime.textContent = formatTime(memorySeconds);
+
+    const resultMessage = document.getElementById("memoryResultMessage");
+    if (resultMessage) {
+        resultMessage.textContent = isNewRecord
+            ? `Yeni rekor! Bu oyunu ${memoryMoves} hamlede tamamladın.`
+            : `Bu oyunu ${memoryMoves} hamlede tamamladın. Rekorun ${getMemoryBestMoves()} hamle.`;
+    }
+
+    updateGameMenu();
     memoryResult.classList.add("show");
 
 }
@@ -2081,7 +2219,7 @@ memoryResultBack.addEventListener("click", () => {
 
     updateGameMenu();
 
-    gamePage.classList.add("show");
+    memoryMenu.classList.add("show");
 
 });
 
@@ -2096,9 +2234,119 @@ memoryBack.addEventListener("click", () => {
 
     memoryGame.classList.remove("show");
 
-    gamePage.classList.add("show");
+    updateGameMenu();
+    memoryMenu.classList.add("show");
 
 });
+
+
+/* =========================================================
+   REFLEKS TESTİ
+========================================================= */
+
+let reactionGameRunning = false;
+let reactionWaiting = false;
+let reactionReadyAt = 0;
+let reactionTimeout = null;
+
+reactionGameOpen.addEventListener("click", () => {
+    openGameWithLoading(
+        "Refleks hazırlanıyor",
+        "Ne kadar hızlı tepki verebildiğini görelim...",
+        "fa-solid fa-bolt",
+        () => {
+            gamePage.classList.remove("show");
+            updateGameMenu();
+            reactionMenu.classList.add("show");
+        }
+    );
+});
+
+reactionStartButton.addEventListener("click", startReactionGame);
+reactionRetry.addEventListener("click", startReactionGame);
+
+reactionMenuBack.addEventListener("click", () => {
+    clearReactionTimer();
+    reactionMenu.classList.remove("show");
+    gamePage.classList.add("show");
+});
+
+reactionBack.addEventListener("click", () => {
+    clearReactionTimer();
+    reactionGameRunning = false;
+    reactionGame.classList.remove("show");
+    reactionMenu.classList.add("show");
+    updateGameMenu();
+});
+
+reactionResultBack.addEventListener("click", () => {
+    reactionResult.classList.remove("show");
+    reactionGameRunning = false;
+    reactionGame.classList.remove("show");
+    reactionMenu.classList.add("show");
+    updateGameMenu();
+});
+
+reactionArena.addEventListener("pointerdown", handleReactionTap, { passive: false });
+
+function startReactionGame() {
+    clearReactionTimer();
+    reactionResult.classList.remove("show");
+    reactionGame.classList.add("show");
+    reactionGameRunning = true;
+    reactionWaiting = true;
+    reactionReadyAt = 0;
+    reactionArena.className = "reaction-arena reaction-waiting";
+    reactionStatus.textContent = "Bekle... Yeşile dönünce dokun!";
+    reactionTime.textContent = "-- ms";
+
+    reactionTimeout = setTimeout(() => {
+        if (!reactionGameRunning) return;
+        reactionWaiting = false;
+        reactionReadyAt = performance.now();
+        reactionArena.className = "reaction-arena reaction-ready";
+        reactionStatus.textContent = "ŞİMDİ!";
+    }, 1200 + Math.random() * 2800);
+}
+
+function handleReactionTap(event) {
+    event.preventDefault();
+    if (!reactionGameRunning) return;
+
+    if (reactionWaiting) {
+        clearReactionTimer();
+        reactionWaiting = false;
+        reactionArena.className = "reaction-arena reaction-false";
+        reactionStatus.textContent = "Erken bastın! Tekrar dene.";
+        setTimeout(() => { if (reactionGameRunning) startReactionGame(); }, 900);
+        return;
+    }
+
+    const result = Math.max(1, Math.round(performance.now() - reactionReadyAt));
+    reactionGameRunning = false;
+
+    const oldBest = getReactionBest();
+    const isRecord = !oldBest || result < oldBest;
+    if (isRecord) setReactionBest(result);
+
+    reactionTime.textContent = `${result} ms`;
+    reactionResultTime.textContent = `${result} ms`;
+    reactionResultMessage.textContent = isRecord
+        ? "Yeni rekor! Refleksin gerçekten iyi."
+        : `Rekorun ${getReactionBest()} ms. Bir tur daha dene!`;
+    reactionStatus.textContent = isRecord ? "Yeni rekor!" : "Harika refleks!";
+    reactionArena.className = "reaction-arena reaction-result-ready";
+    updateGameMenu();
+
+    setTimeout(() => reactionResult.classList.add("show"), 250);
+}
+
+function clearReactionTimer() {
+    if (reactionTimeout) {
+        clearTimeout(reactionTimeout);
+        reactionTimeout = null;
+    }
+}
 
 
 /* =========================================================
@@ -2194,3 +2442,374 @@ document.addEventListener(
 
 updateGameMenu();
 
+
+
+/* =========================================================
+   SAYI BİRLEŞTİR (2048)
+========================================================= */
+let mergeGrid = [];
+let mergeScore = 0;
+let mergeRunning = false;
+
+function createEmptyMergeGrid(){ return Array.from({length:4},()=>Array(4).fill(0)); }
+function addMergeTile(){
+    const empty=[];
+    mergeGrid.forEach((row,r)=>row.forEach((v,c)=>{if(!v) empty.push([r,c]);}));
+    if(!empty.length) return false;
+    const [r,c]=empty[Math.floor(Math.random()*empty.length)];
+    mergeGrid[r][c]=Math.random()<0.9?2:4; return true;
+}
+function slideMergeLine(line){
+    const arr=line.filter(Boolean), out=[]; let gained=0;
+    for(let i=0;i<arr.length;i++){
+        if(arr[i]===arr[i+1]){ const v=arr[i]*2; out.push(v); gained+=v; i++; }
+        else out.push(arr[i]);
+    }
+    while(out.length<4) out.push(0);
+    return {line:out,gained};
+}
+function moveMerge(dir){
+    if(!mergeRunning) return false;
+    const before=JSON.stringify(mergeGrid); let gained=0;
+    if(dir==='left'||dir==='right'){
+        for(let r=0;r<4;r++){ let line=[...mergeGrid[r]]; if(dir==='right') line.reverse(); const res=slideMergeLine(line); if(dir==='right') res.line.reverse(); mergeGrid[r]=res.line; gained+=res.gained; }
+    } else {
+        for(let c=0;c<4;c++){ let line=[0,1,2,3].map(r=>mergeGrid[r][c]); if(dir==='down') line.reverse(); const res=slideMergeLine(line); if(dir==='down') res.line.reverse(); [0,1,2,3].forEach(r=>mergeGrid[r][c]=res.line[r]); gained+=res.gained; }
+    }
+    if(JSON.stringify(mergeGrid)===before) return false;
+    mergeScore+=gained; mergeScoreElement.textContent=mergeScore;
+    if(mergeScore>getMergeBest()) setMergeBest(mergeScore);
+    addMergeTile(); renderMerge(); updateGameMenu();
+    if(!canMergeMove()) setTimeout(()=>{
+        if(!mergeRunning) return;
+        mergeRunning=false;
+        mergeResultScore.textContent = mergeScore;
+        const oldBest = getMergeBest();
+        mergeResultMessage.textContent = mergeScore >= oldBest
+            ? `Oyun bitti! Skorun ${mergeScore}. Yeni rekorunu zorlamaya devam et.`
+            : `Oyun bitti! Skorun ${mergeScore}. Rekorun ${oldBest}.`;
+        mergeResult.classList.add('show');
+        updateGameMenu();
+    },300);
+    return true;
+}
+function canMergeMove(){
+    if(mergeGrid.some(r=>r.includes(0))) return true;
+    for(let r=0;r<4;r++) for(let c=0;c<4;c++){ if(c<3&&mergeGrid[r][c]===mergeGrid[r][c+1]) return true; if(r<3&&mergeGrid[r][c]===mergeGrid[r+1][c]) return true; }
+    return false;
+}
+function renderMerge(){
+    mergeStartBoard.innerHTML='';
+    mergeGrid.flat().forEach(v=>{ const t=document.createElement('div'); t.className=`merge-tile ${v?'v'+v:''}`; t.textContent=v||''; mergeStartBoard.appendChild(t); });
+}
+function startMergeGame(){
+    mergeRunning=true; mergeScore=0; mergeGrid=createEmptyMergeGrid(); addMergeTile(); addMergeTile(); mergeScoreElement.textContent='0'; mergeBestElement.textContent=getMergeBest(); renderMerge();
+}
+function openMergeMenu(){ openGameWithLoading('Sayı oyunu hazırlanıyor','Tahta hazırlanıyor...','fa-solid fa-layer-group',()=>{ gamePage.classList.remove('show'); updateGameMenu(); mergeMenu.classList.add('show'); }); }
+mergeGameOpen.addEventListener('click',openMergeMenu);
+mergeStartButton.addEventListener('click',()=>{mergeMenu.classList.remove('show'); mergeGame.classList.add('show'); startMergeGame();});
+mergeMenuBack.addEventListener('click',()=>{mergeMenu.classList.remove('show');gamePage.classList.add('show');});
+mergeBack.addEventListener('click',()=>{mergeRunning=false;mergeGame.classList.remove('show');updateGameMenu();mergeMenu.classList.add('show');});
+mergeAgain.addEventListener('click',()=>{mergeResult.classList.remove('show');mergeGame.classList.add('show');startMergeGame();});
+mergeResultBack.addEventListener('click',()=>{mergeResult.classList.remove('show');mergeGame.classList.remove('show');updateGameMenu();mergeMenu.classList.add('show');});
+window.addEventListener('keydown',e=>{ if(!mergeGame.classList.contains('show')) return; const map={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'}; if(map[e.key]){e.preventDefault();moveMerge(map[e.key]);}});
+let mergeTouchStart=null;
+mergeStartBoard.addEventListener('touchstart',e=>{const t=e.changedTouches[0];mergeTouchStart=[t.clientX,t.clientY];},{passive:true});
+mergeStartBoard.addEventListener('touchend',e=>{if(!mergeTouchStart)return;const t=e.changedTouches[0],dx=t.clientX-mergeTouchStart[0],dy=t.clientY-mergeTouchStart[1];mergeTouchStart=null;if(Math.max(Math.abs(dx),Math.abs(dy))<25)return;moveMerge(Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'));},{passive:true});
+
+/* =========================================================
+   HEDEF AVI
+========================================================= */
+let puzzleMoves=0;
+let puzzleRunning=false;
+let puzzleTargetTimer=null;
+let puzzleGameTimer=null;
+let puzzleEndAt=0;
+let puzzleTargetSize=74;
+let puzzleTargetX=0;
+let puzzleTargetY=0;
+
+function getPuzzleBestMoves(){
+    return Number(localStorage.getItem(STORAGE.puzzleBestMoves) || 0);
+}
+function setPuzzleBestMoves(value){
+    localStorage.setItem(STORAGE.puzzleBestMoves, String(value));
+}
+
+function renderTargetBest(){
+    const best=getPuzzleBestMoves();
+    if(puzzleMenuBest) puzzleMenuBest.textContent=best ? best : "0";
+    if(puzzleMenuBestCard) puzzleMenuBestCard.textContent=best ? `${best} Puan` : "Henüz yok";
+    if(puzzleBestInfo) puzzleBestInfo.textContent=best || "--";
+}
+
+function clearTargetTimers(){
+    if(puzzleTargetTimer){ clearTimeout(puzzleTargetTimer); puzzleTargetTimer=null; }
+    if(puzzleGameTimer){ clearInterval(puzzleGameTimer); puzzleGameTimer=null; }
+}
+
+function placeTarget(){
+    if(!puzzleRunning) return;
+
+    const rect=puzzleBoard.getBoundingClientRect();
+    const size=Math.max(38, 74 - Math.min(28, Math.floor(puzzleMoves/5)*4));
+    puzzleTargetSize=size;
+
+    const padding=12;
+    const maxX=Math.max(padding, rect.width-size-padding);
+    const maxY=Math.max(padding, rect.height-size-padding);
+
+    puzzleTargetX=padding + Math.random()*(maxX-padding);
+    puzzleTargetY=padding + Math.random()*(maxY-padding);
+
+    puzzleTarget.style.width=size+"px";
+    puzzleTarget.style.height=size+"px";
+    puzzleTarget.style.left=puzzleTargetX+"px";
+    puzzleTarget.style.top=puzzleTargetY+"px";
+    puzzleTarget.classList.remove("target-pop");
+    void puzzleTarget.offsetWidth;
+    puzzleTarget.classList.add("target-pop");
+
+    const lifespan=Math.max(520, 1250 - puzzleMoves*18);
+    puzzleTargetTimer=setTimeout(()=>{
+        if(!puzzleRunning) return;
+        placeTarget();
+    },lifespan);
+}
+
+function updateTargetCountdown(){
+    if(!puzzleRunning) return;
+    const left=Math.max(0,Math.ceil((puzzleEndAt-Date.now())/1000));
+    puzzleMovesElement.textContent=left;
+    puzzleMessage.textContent=left<=5 ? `ACELE ET! ${left}` : "HEDEFİ YAKALA!";
+    if(left<=0) finishPuzzle();
+}
+
+function startPuzzleGame(){
+    clearTargetTimers();
+    puzzleRunning=true;
+    puzzleMoves=0;
+    puzzleMovesElement.textContent="30";
+    puzzleMovesInfo.textContent="0";
+    renderTargetBest();
+    puzzleMessage.textContent="HEDEFİ YAKALA!";
+    puzzleEndAt=Date.now()+30000;
+    placeTarget();
+    puzzleGameTimer=setInterval(updateTargetCountdown,100);
+}
+
+function hitTarget(){
+    if(!puzzleRunning) return;
+    puzzleMoves++;
+    puzzleMovesInfo.textContent=puzzleMoves;
+    placeTarget();
+}
+
+function finishPuzzle(){
+    if(!puzzleRunning) return;
+    puzzleRunning=false;
+    clearTargetTimers();
+
+    const old=getPuzzleBestMoves();
+    const record=puzzleMoves>old;
+    if(record) setPuzzleBestMoves(puzzleMoves);
+
+    puzzleMovesElement.textContent="0";
+    puzzleResultMoves.textContent=puzzleMoves;
+    puzzleResultMessage.textContent=record
+        ? `Yeni rekor! ${puzzleMoves} hedef yakaladın.`
+        : `${puzzleMoves} hedef yakaladın. Rekorun ${getPuzzleBestMoves()} puan.`;
+
+    renderTargetBest();
+    updateGameMenu();
+    setTimeout(()=>puzzleResult.classList.add("show"),180);
+}
+
+function openPuzzleMenu(){
+    openGameWithLoading(
+        "Hedef Avı hazırlanıyor",
+        "Hedefler yerleştiriliyor...",
+        "fa-solid fa-crosshairs",
+        ()=>{
+            gamePage.classList.remove("show");
+            updateGameMenu();
+            renderTargetBest();
+            puzzleMenu.classList.add("show");
+        }
+    );
+}
+
+puzzleGameOpen.addEventListener("click",openPuzzleMenu);
+puzzleStartButton.addEventListener("click",()=>{
+    puzzleMenu.classList.remove("show");
+    puzzleGame.classList.add("show");
+    startPuzzleGame();
+});
+puzzleMenuBack.addEventListener("click",()=>{
+    puzzleMenu.classList.remove("show");
+    gamePage.classList.add("show");
+});
+puzzleBack.addEventListener("click",()=>{
+    puzzleRunning=false;
+    clearTargetTimers();
+    puzzleGame.classList.remove("show");
+    renderTargetBest();
+    puzzleMenu.classList.add("show");
+});
+puzzleTarget.addEventListener("pointerdown",e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    hitTarget();
+});
+puzzleAgain.addEventListener("click",()=>{
+    puzzleResult.classList.remove("show");
+    puzzleGame.classList.add("show");
+    startPuzzleGame();
+});
+puzzleResultBack.addEventListener("click",()=>{
+    puzzleResult.classList.remove("show");
+    puzzleRunning=false;
+    clearTargetTimers();
+    puzzleGame.classList.remove("show");
+    renderTargetBest();
+    puzzleMenu.classList.add("show");
+});
+renderTargetBest();
+
+/* =========================================================
+   KULE USTASI
+========================================================= */
+const STACK_STORAGE = "apexio_stack_best";
+let stackRunning=false;
+let stackScore=0;
+let stackBest=Number(localStorage.getItem(STACK_STORAGE)||0);
+let stackBlocks=[];
+let stackMoveX=0;
+let stackDirection=1;
+let stackFrame=null;
+let stackLastTime=0;
+let stackBlockWidth=150;
+let stackBlockHeight=30;
+
+function getStackBest(){ return Number(localStorage.getItem(STACK_STORAGE)||0); }
+function setStackBest(v){ localStorage.setItem(STACK_STORAGE,String(v)); stackBest=v; }
+function updateStackMenu(){
+    const best=getStackBest();
+    stackMenuBest.textContent=best;
+    stackMenuBestCard.textContent=best;
+    stackBestElement.textContent=best;
+}
+function getStackHiddenCount(){
+    // 10. kata gelindikten sonra alt katlar kadrajı doldurmaması için
+    // en alttan kademeli olarak gizlenir.
+    if(stackScore < 10) return 0;
+    if(stackScore === 10) return 1;
+    if(stackScore === 11) return 2;
+    return Math.max(3, stackScore - 10);
+}
+
+function renderStackTower(){
+    stackTower.innerHTML='';
+    const hidden=getStackHiddenCount();
+    stackBlocks.forEach((b,i)=>{
+        if(i<hidden) return;
+        const el=document.createElement('div');
+        el.className='stack-block';
+        el.style.width=b.width+'px';
+        el.style.height=stackBlockHeight+'px';
+        el.style.left=b.x+'px';
+        el.style.bottom=((i-hidden)*stackBlockHeight)+'px';
+        el.textContent=i+1;
+        stackTower.appendChild(el);
+    });
+}
+function spawnStackMoving(){
+    const arenaW=stackArena.clientWidth;
+    const base=stackBlocks[stackBlocks.length-1];
+    stackBlockWidth=base ? base.width : Math.min(150,arenaW*0.55);
+    stackMoveX=0;
+    stackDirection=1;
+    stackMoving.style.width=stackBlockWidth+'px';
+    stackMoving.style.left='0px';
+    const hidden=getStackHiddenCount();
+    stackMoving.style.bottom=((stackBlocks.length-hidden)*stackBlockHeight)+'px';
+    stackMoving.style.transform='none';
+    stackMoving.style.display='block';
+}
+function updateStackCamera(){
+    // Kamera HİÇ hareket etmez. Kule büyüdükçe en alttaki katlar
+    // renderStackTower() tarafından gizlenir ve kalan katlar aşağı
+    // doğru yeniden yerleştirilir. Böylece kule ekrandan dışarı taşmaz.
+    if(!stackArena) return;
+    stackTower.style.transform='none';
+    stackMoving.style.transform='none';
+}
+
+function startStackGame(){
+    if(stackFrame) cancelAnimationFrame(stackFrame);
+    stackRunning=true; stackScore=0; stackBlocks=[]; stackLastTime=0;
+    stackTower.style.transform='translateY(0)';
+    stackMoving.style.transform='translateY(0)';
+    stackScoreElement.textContent='0'; updateStackMenu();
+    stackInstruction.textContent='Doğru anda dokun!';
+    stackMoving.style.display='block';
+    stackBlocks.push({x:Math.max(0,(stackArena.clientWidth-150)/2),width:Math.min(150,stackArena.clientWidth*0.55)});
+    renderStackTower(); spawnStackMoving();
+    updateStackCamera();
+    stackFrame=requestAnimationFrame(updateStackMoving);
+}
+function updateStackMoving(timestamp){
+    if(!stackRunning) return;
+    const dt=stackLastTime ? Math.min(0.04,(timestamp-stackLastTime)/1000) : 0;
+    stackLastTime=timestamp;
+    const maxX=Math.max(0,stackArena.clientWidth-stackBlockWidth);
+    const speed=180 + Math.min(100,stackScore*5);
+    stackMoveX += stackDirection*speed*dt;
+    if(stackMoveX<=0){stackMoveX=0;stackDirection=1;}
+    if(stackMoveX>=maxX){stackMoveX=maxX;stackDirection=-1;}
+    stackMoving.style.left=stackMoveX+'px';
+    updateStackCamera();
+    stackFrame=requestAnimationFrame(updateStackMoving);
+}
+function placeStackBlock(){
+    if(!stackRunning) return;
+    const prev=stackBlocks[stackBlocks.length-1];
+    const left=Math.max(stackMoveX,prev.x);
+    const right=Math.min(stackMoveX+stackBlockWidth,prev.x+prev.width);
+    const overlap=right-left;
+    if(overlap<=10){ finishStackGame(); return; }
+    stackBlocks.push({x:left,width:overlap});
+    stackScore=stackBlocks.length-1;
+    stackScoreElement.textContent=stackScore;
+    if(stackScore>getStackBest()) setStackBest(stackScore);
+    renderStackTower();
+    spawnStackMoving();
+    updateStackCamera();
+}
+function finishStackGame(){
+    if(!stackRunning)return;
+    stackRunning=false;
+    if(stackFrame) cancelAnimationFrame(stackFrame);
+    stackFrame=null;
+    stackMoving.style.display='none';
+    const old=getStackBest();
+    const record=stackScore>old;
+    if(record)setStackBest(stackScore);
+    stackResultScore.textContent=stackScore;
+    stackResultMessage.textContent=record?`Yeni rekor! Kuleni ${stackScore} kat yükselttin.`:`Kuleni ${stackScore} kat yükselttin. Rekorun ${getStackBest()} kat.`;
+    updateStackMenu();
+    setTimeout(()=>stackResult.classList.add('show'),180);
+}
+function openStackMenu(){
+    openGameWithLoading('Kule hazırlanıyor','Bloklar hazırlanıyor...','fa-solid fa-layer-group',()=>{
+        gamePage.classList.remove('show'); updateGameMenu(); updateStackMenu(); stackMenu.classList.add('show');
+    });
+}
+stackGameOpen.addEventListener('click',openStackMenu);
+stackStartButton.addEventListener('click',()=>{stackMenu.classList.remove('show');stackGame.classList.add('show');startStackGame();});
+stackMenuBack.addEventListener('click',()=>{stackMenu.classList.remove('show');gamePage.classList.add('show');});
+stackArena.addEventListener('pointerdown',e=>{e.preventDefault();placeStackBlock();},{passive:false});
+stackBack.addEventListener('click',()=>{stackRunning=false;if(stackFrame)cancelAnimationFrame(stackFrame);stackFrame=null;stackGame.classList.remove('show');updateStackMenu();stackMenu.classList.add('show');});
+stackAgain.addEventListener('click',()=>{stackResult.classList.remove('show');stackGame.classList.add('show');startStackGame();});
+stackResultBack.addEventListener('click',()=>{stackResult.classList.remove('show');stackGame.classList.remove('show');updateStackMenu();stackMenu.classList.add('show');});
+updateStackMenu();

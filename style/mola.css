@@ -1467,97 +1467,42 @@ button {
     overflow: hidden;
     border: 1px solid var(--border);
     border-radius: 25px;
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(124, 140, 255, 0.08),
-            transparent 60%
-        ),
-        #111925;
+    background: radial-gradient(circle at 50% 0%, rgba(124,140,255,.08), transparent 60%), #111925;
 }
 
 .balloon {
     position: absolute;
+    z-index: 2;
     width: 50px;
     height: 62px;
     border-radius: 50% 50% 48% 48%;
     cursor: pointer;
-    animation: balloonFloat 1.8s ease-in-out infinite alternate;
-    box-shadow:
-        inset -7px -9px 13px rgba(0, 0, 0, 0.15),
-        inset 7px 8px 12px rgba(255, 255, 255, 0.22),
-        0 10px 25px rgba(0, 0, 0, 0.2);
+    transform: scale(var(--balloon-scale,1));
+    box-shadow: inset -7px -9px 13px rgba(0,0,0,.15), inset 7px 8px 12px rgba(255,255,255,.22), 0 10px 25px rgba(0,0,0,.2);
     transform-origin: center bottom;
 }
 
-.balloon::before {
-    content: "";
-    position: absolute;
-    top: 10px;
-    left: 11px;
-    width: 9px;
-    height: 16px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.45);
-    transform: rotate(25deg);
+.balloon::before { content:""; position:absolute; top:10px; left:11px; width:9px; height:16px; border-radius:50%; background:rgba(255,255,255,.45); transform:rotate(25deg); }
+.balloon::after { content:""; position:absolute; left:50%; bottom:-6px; width:8px; height:8px; background:inherit; transform:translateX(-50%) rotate(45deg); }
+.balloon-string { position:absolute; left:50%; bottom:-40px; width:1px; height:35px; background:rgba(255,255,255,.3); }
+
+@keyframes balloonRise {
+    0% { transform:translateY(0) scale(var(--balloon-scale,1)) rotate(-3deg); }
+    45% { transform:translateY(-45vh) scale(var(--balloon-scale,1)) rotate(3deg); }
+    100% { transform:translateY(-115vh) scale(var(--balloon-scale,1)) rotate(-2deg); }
 }
 
-.balloon::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: -6px;
-    width: 8px;
-    height: 8px;
-    background: inherit;
-    transform: translateX(-50%) rotate(45deg);
-}
+.balloon.pop { animation:balloonPop .18s forwards !important; }
+@keyframes balloonPop { 0%{transform:scale(var(--balloon-scale,1));opacity:1} 70%{transform:scale(1.35)} 100%{transform:scale(0);opacity:0} }
 
-.balloon-string {
-    position: absolute;
-    left: 50%;
-    bottom: -40px;
-    width: 1px;
-    height: 35px;
-    background: rgba(255, 255, 255, 0.3);
-}
+.bomb { width:52px; height:52px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#5c6676,#202631 65%,#11151c); border:2px solid rgba(255,255,255,.12); box-shadow:0 10px 24px rgba(0,0,0,.35), inset 4px 4px 8px rgba(255,255,255,.12); }
+.bomb::before { content:""; position:absolute; top:-9px; right:5px; width:13px; height:10px; border-radius:7px 7px 2px 2px; background:#343b48; transform:rotate(18deg); }
+.bomb::after { display:none; }
+.bomb-icon { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#ff6b6b; font-size:21px; }
+.bomb-hit { animation:bombHit .18s forwards !important; }
+@keyframes bombHit { 0%{transform:scale(1)} 50%{transform:scale(1.25) rotate(10deg)} 100%{transform:scale(.2) rotate(-20deg);opacity:0} }
 
-@keyframes balloonFloat {
-    from {
-        transform: translateY(0) rotate(-3deg);
-    }
-
-    to {
-        transform: translateY(-10px) rotate(3deg);
-    }
-}
-
-.balloon.pop {
-    animation: balloonPop 0.18s forwards;
-}
-
-@keyframes balloonPop {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    70% {
-        transform: scale(1.3);
-    }
-
-    100% {
-        transform: scale(0);
-        opacity: 0;
-    }
-}
-
-.balloon-game-bottom {
-    text-align: center;
-    padding-top: 12px;
-    color: var(--text-soft);
-    font-size: 9px;
-}
+.balloon-game-bottom { text-align:center; padding-top:12px; color:var(--text-soft); font-size:9px; }
 
 
 /* =========================================================
@@ -1886,6 +1831,19 @@ button {
 
 
 /* =========================================================
+   REFLEKS TESTİ
+========================================================= */
+.reaction-preview{display:flex;align-items:center;justify-content:center;gap:7px;color:#ffc857;font-size:14px;background:linear-gradient(135deg,#1d2737,#121923)}
+.reaction-preview span:nth-child(2){color:#7c8cff;font-size:18px}
+.reaction-menu-screen,.reaction-game-screen{display:flex;flex-direction:column}
+.reaction-menu-hero{padding:22px 18px;margin-bottom:16px;border:1px solid var(--border);border-radius:24px;text-align:center;background:radial-gradient(circle at 50% 0%,rgba(255,200,87,.16),transparent 65%),var(--bg-card)}
+.reaction-menu-icon{width:68px;height:68px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;border-radius:22px;color:#fff;background:linear-gradient(135deg,#f59e0b,#f97316);box-shadow:0 14px 35px rgba(249,115,22,.22);font-size:27px}
+.reaction-menu-hero h3{font-size:17px}.reaction-menu-hero p{max-width:300px;margin:6px auto 0;color:var(--text-secondary);font-size:9px;line-height:1.6}
+.reaction-arena{min-height:min(66vh,520px);flex:1;border:1px solid var(--border);border-radius:28px;display:flex;align-items:center;justify-content:center;text-align:center;padding:25px;transition:background .2s,transform .2s;user-select:none;touch-action:manipulation}
+.reaction-waiting{background:#182130}.reaction-ready{background:#35c97a;color:#fff;box-shadow:0 0 50px rgba(53,201,122,.25)}.reaction-false{background:#e05252;color:#fff}.reaction-result-ready{background:var(--bg-card)}
+.reaction-center h3{font-size:24px;margin-top:12px}.reaction-center p{font-size:9px;opacity:.7;margin-top:7px}.reaction-icon{width:74px;height:74px;margin:0 auto;display:flex;align-items:center;justify-content:center;border-radius:24px;background:rgba(255,255,255,.1);font-size:27px}
+
+/* =========================================================
    BİLDİRİM
 ========================================================= */
 
@@ -2065,3 +2023,72 @@ button {
 
 }
 
+
+
+/* =========================================================
+   HAFIZA MENÜSÜ
+========================================================= */
+.memory-menu-screen{display:flex;flex-direction:column}
+.memory-menu-hero{padding:22px 18px;margin-bottom:16px;border:1px solid var(--border);border-radius:24px;text-align:center;background:radial-gradient(circle at 50% 0%,rgba(124,140,255,.16),transparent 65%),var(--bg-card);box-shadow:var(--shadow)}
+.memory-menu-icon{width:68px;height:68px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;border-radius:22px;color:#fff;background:linear-gradient(135deg,#7c8cff,#5ed7ff);box-shadow:0 14px 35px rgba(124,140,255,.2);font-size:27px}
+.memory-menu-hero h3{font-size:17px;margin:0}
+.memory-menu-hero p{max-width:300px;margin:7px auto 0;color:var(--text-secondary);font-size:9px;line-height:1.7}
+.memory-menu-stats{margin-bottom:16px}
+.memory-menu-actions{margin-top:auto;padding-bottom:10px}
+
+/* =========================================================
+   YENİ OYUNLAR - MENÜLER
+========================================================= */
+.merge-preview{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:10px;background:linear-gradient(135deg,#222c43,#121923);align-content:center}
+.merge-preview span{display:flex;align-items:center;justify-content:center;aspect-ratio:1;border-radius:7px;background:#667eea;color:#fff;font-size:9px;font-weight:800}.merge-preview span:nth-child(2){background:#f59e0b}.merge-preview span:nth-child(3){background:#10b981}.merge-preview span:nth-child(4){background:#ef476f}
+.puzzle-preview{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:10px;background:linear-gradient(135deg,#172438,#0e151f)}
+.puzzle-preview span{display:flex;align-items:center;justify-content:center;border-radius:5px;background:rgba(124,140,255,.18);color:#dce2ff;font-size:7px;font-weight:800}.puzzle-preview span:last-child{background:rgba(255,255,255,.05);color:#48d597}
+.merge-menu-screen,.merge-game-screen,.puzzle-menu-screen,.puzzle-game-screen{display:flex;flex-direction:column}
+.merge-menu-hero,.puzzle-menu-hero{padding:22px 18px;margin-bottom:16px;border:1px solid var(--border);border-radius:24px;text-align:center;background:radial-gradient(circle at 50% 0%,rgba(72,213,151,.14),transparent 65%),var(--bg-card);box-shadow:var(--shadow)}
+.merge-menu-icon,.puzzle-menu-icon{width:68px;height:68px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;border-radius:22px;color:#fff;background:linear-gradient(135deg,#10b981,#0ea5e9);box-shadow:0 14px 35px rgba(14,165,233,.18);font-size:27px}
+.puzzle-menu-icon{background:linear-gradient(135deg,#f97316,#ec4899)}
+.merge-menu-hero h3,.puzzle-menu-hero h3{font-size:17px}.merge-menu-hero p,.puzzle-menu-hero p{max-width:300px;margin:7px auto 0;color:var(--text-secondary);font-size:9px;line-height:1.7}
+.merge-info,.puzzle-info{display:flex;justify-content:space-between;gap:8px;margin-bottom:12px;padding:12px;border:1px solid var(--border);border-radius:16px;background:var(--bg-card)}
+.merge-info div,.puzzle-info div{display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:9px}.merge-info i,.puzzle-info i{color:var(--accent-light)}
+.merge-board{width:min(92vw,430px);aspect-ratio:1;margin:0 auto;padding:9px;display:grid;grid-template-columns:repeat(4,1fr);gap:7px;border-radius:20px;background:#182130;border:1px solid var(--border);touch-action:none;user-select:none}
+.merge-tile{display:flex;align-items:center;justify-content:center;border-radius:13px;background:#263247;color:#aab5c8;font-size:22px;font-weight:800;transition:transform .12s,background .15s}.merge-tile.v2{background:#334155;color:#fff}.merge-tile.v4{background:#4f46e5;color:#fff}.merge-tile.v8{background:#0ea5e9;color:#fff}.merge-tile.v16{background:#10b981;color:#fff}.merge-tile.v32{background:#f59e0b;color:#fff}.merge-tile.v64{background:#f97316;color:#fff}.merge-tile.v128{background:#ef476f;color:#fff;font-size:18px}.merge-tile.v256{background:#d946ef;color:#fff;font-size:18px}.merge-tile.v512{background:#8b5cf6;color:#fff;font-size:18px}.merge-tile.v1024{background:#eab308;color:#111;font-size:15px}.merge-tile.v2048{background:linear-gradient(135deg,#facc15,#fb7185);color:#111;font-size:15px;box-shadow:0 0 25px rgba(250,204,21,.3)}
+.merge-help{text-align:center;color:var(--text-soft);font-size:9px;margin-top:12px}
+.puzzle-board{width:min(92vw,400px);aspect-ratio:1;margin:0 auto;padding:8px;display:grid;grid-template-columns:repeat(4,1fr);gap:7px;border-radius:20px;background:#182130;border:1px solid var(--border);touch-action:manipulation;user-select:none}
+.puzzle-tile{display:flex;align-items:center;justify-content:center;border:0;border-radius:12px;background:linear-gradient(135deg,#667eea,#5b6ee1);color:#fff;font-size:18px;font-weight:800;box-shadow:0 7px 16px rgba(0,0,0,.16);transition:transform .12s}.puzzle-tile:active{transform:scale(.94)}.puzzle-tile.empty{background:rgba(255,255,255,.04);box-shadow:none}.puzzle-message{text-align:center;margin-top:13px;color:var(--text-secondary);font-size:9px}
+
+/* =========================================================
+   KULE USTASI
+========================================================= */
+.stack-preview{display:flex;align-items:flex-end;justify-content:center;gap:3px;padding:10px;background:linear-gradient(135deg,#201b3a,#111827)}
+.stack-preview span{width:14px;height:9px;border-radius:3px;background:#a78bfa;transform:skewX(-10deg);box-shadow:0 3px 8px rgba(167,139,250,.2)}
+.stack-preview span:nth-child(2){width:20px;background:#60a5fa}.stack-preview span:nth-child(3){width:27px;background:#34d399}.stack-preview span:nth-child(4){width:34px;background:#fbbf24}
+.stack-menu-screen,.stack-game-screen{display:flex;flex-direction:column}
+.stack-menu-hero{padding:22px 18px;margin-bottom:16px;border:1px solid var(--border);border-radius:24px;text-align:center;background:radial-gradient(circle at 50% 0%,rgba(167,139,250,.18),transparent 65%),var(--bg-card);box-shadow:var(--shadow)}
+.stack-menu-icon{width:68px;height:68px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;border-radius:22px;color:#fff;background:linear-gradient(135deg,#8b5cf6,#3b82f6);box-shadow:0 14px 35px rgba(99,102,241,.2);font-size:27px}
+.stack-menu-hero h3{font-size:17px}.stack-menu-hero p{max-width:300px;margin:7px auto 0;color:var(--text-secondary);font-size:9px;line-height:1.7}
+.stack-info{display:flex;justify-content:space-between;gap:8px;margin-bottom:12px;padding:12px;border:1px solid var(--border);border-radius:16px;background:var(--bg-card)}
+.stack-info div{display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:9px}.stack-info i{color:#a78bfa}
+.stack-arena{position:relative;width:min(92vw,430px);height:min(68vh,560px);min-height:420px;margin:0 auto;overflow:hidden;border:1px solid var(--border);border-radius:24px;background:linear-gradient(180deg,#151d2d,#0d131d);touch-action:manipulation;user-select:none;box-shadow:var(--shadow)}
+.stack-arena:after{content:"";position:absolute;left:8%;right:8%;bottom:12px;height:2px;background:rgba(255,255,255,.08);border-radius:2px}
+.stack-tower{position:absolute;left:0;right:0;bottom:14px;height:calc(100% - 20px);pointer-events:none}
+.stack-block,.stack-moving{position:absolute;bottom:0;border-radius:7px;background:linear-gradient(135deg,#8b5cf6,#3b82f6);box-shadow:0 7px 16px rgba(59,130,246,.22);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.75);font-size:8px;font-weight:800;transition:background .15s}
+.stack-moving{display:none;z-index:5;height:30px;background:linear-gradient(135deg,#fbbf24,#f97316);color:#fff}
+.stack-instruction{position:absolute;z-index:10;top:18px;left:50%;transform:translateX(-50%);padding:8px 12px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:rgba(0,0,0,.2);color:var(--text-secondary);font-size:9px;pointer-events:none;white-space:nowrap}
+
+/* 2048 sonuç kartı küçük ekranlarda da düzgün dursun */
+#mergeResult .result-box{max-width:360px}
+
+/* =========================================================
+   HEDEF AVI
+========================================================= */
+.target-preview{position:relative;overflow:hidden}
+.target-dot{position:absolute;width:13px;height:13px;border-radius:50%;background:#fbbf24;box-shadow:0 0 12px rgba(251,191,36,.5)}
+.target-dot:nth-child(1){left:22%;top:25%}.target-dot:nth-child(2){right:20%;top:48%;width:9px;height:9px;background:#60a5fa}.target-dot:nth-child(3){left:45%;bottom:18%;width:16px;height:16px;background:#34d399}
+.target-cross{font-size:22px;color:#fbbf24;font-weight:900}
+.target-menu-icon{background:linear-gradient(135deg,#f59e0b,#ef4444)!important}
+.target-game-arena{position:relative;overflow:hidden;display:block!important;touch-action:none!important;background:radial-gradient(circle at 50% 30%,rgba(99,102,241,.12),transparent 50%),#111827!important}
+.target-game-target{position:absolute;z-index:4;border:0;border-radius:50%;padding:0;cursor:pointer;background:radial-gradient(circle at 35% 30%,#fff 0 8%,#fef3c7 9% 19%,#f59e0b 20% 48%,#ef4444 49% 70%,#991b1b 71%);box-shadow:0 0 28px rgba(245,158,11,.35);transform:scale(.75);transition:transform .12s ease;touch-action:manipulation}
+.target-game-target.target-pop{animation:targetPop .18s ease-out forwards}
+@keyframes targetPop{from{transform:scale(.65);opacity:.5}to{transform:scale(1);opacity:1}}
+.target-game-countdown{position:absolute;z-index:3;top:16px;left:50%;transform:translateX(-50%);padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);color:#fff;font-size:10px;font-weight:800;pointer-events:none}
+.stack-moving{box-sizing:border-box}
